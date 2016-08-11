@@ -14,8 +14,9 @@ public class Painter extends PApplet {
 	private final int HEIGHT = 800;
 	// Arraylist and Array um die Punkte zu speichen
 	ArrayList<Particle> particles;
+	Region regions;
 	long lastSpawn = 0;
-	Voronoi myVoronoi;
+
 	JSONArray values;
 	int cModel = 0;
 	int colorModel = 0;
@@ -35,7 +36,7 @@ public class Painter extends PApplet {
 		for (int i = 0; i < 10; i++) {
 			particles.add(new Particle(this));
 		}
-		createVoronoi();
+		regions = new Region(this);
 	}
 
 	public void settings() {
@@ -44,22 +45,15 @@ public class Painter extends PApplet {
 
 	public void draw() {
 		background(colors[0]);
-		// Wenn mindestens 1 Punkt vorhanden ist wird gezeichnet
+
+		// run the Regions before the points to be drawn properly
 		if (particles.size() > 1) {
-
-			// getRegions
-			strokeWeight(2);
-			stroke(random(10, 100), 150);
-			MPolygon[] myRegions = myVoronoi.getRegions();
-			for (int i = 0; i < myRegions.length; i++) {
-				// an array of points
-				myRegions[i].draw(this); // draw this shape
-			}
+			runRegions();
 		}
-
+		
 		removeDead();
 		runParticles();
-		createVoronoi();
+		// createVoronoi();
 	}
 
 	public void mouseDragged() {
@@ -70,18 +64,6 @@ public class Painter extends PApplet {
 		lastSpawn = millis();
 	}
 
-	void runParticles(){
-		for (Particle p : particles) {
-			// Gravity is scaled by mass here!
-			// PVector gravity = new PVector(1f * p.MASS, 0);
-			// Apply gravity
-			// p.applyForce(gravity);
-
-			// Update and display
-			p.run();
-		}	
-	}
-	
 	void removeDead() {
 		// Cycle through the ArrayList backwards, because we are deleting while
 		// iterating
@@ -92,13 +74,20 @@ public class Painter extends PApplet {
 		}
 	}
 
-	void createVoronoi() {
-		float[][] points = new float[particles.size()][2];
-		for (int i = 0; i < particles.size(); i++) {
-			points[i][0] = particles.get(i).location.x;
-			points[i][1] = particles.get(i).location.y;
+	void runParticles() {
+		for (Particle p : particles) {
+			// Gravity is scaled by mass here!
+			// PVector gravity = new PVector(1f * p.MASS, 0);
+			// Apply gravity
+			// p.applyForce(gravity);
+
+			// Update and display
+			p.run();
 		}
-		myVoronoi = new Voronoi(points);
+	}
+
+	void runRegions() {
+		regions.run(particles);
 	}
 
 	public static void main(String[] args) {
