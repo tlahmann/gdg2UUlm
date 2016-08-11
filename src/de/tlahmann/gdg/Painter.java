@@ -33,7 +33,7 @@ public class Painter extends PApplet {
 		colors[1] = color(colorP.getInt("r"), colorP.getInt("g"), colorP.getInt("b"), colorP.getInt("a"));
 
 		particles = new ArrayList<Particle>();
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 1; i++) {
 			particles.add(new Particle(this));
 		}
 		regions = new Region(this);
@@ -45,8 +45,8 @@ public class Painter extends PApplet {
 	}
 
 	public void draw() {
-		 background(colors[0]);
-//		drawGradient(width / 2, height / 2, colors[0], colors[1]);
+		background(colors[0]);
+		// drawGradient(width / 2, height / 2, colors[0], colors[1]);
 
 		// run the Regions before the points to be drawn properly
 		if (particles.size() > 1) {
