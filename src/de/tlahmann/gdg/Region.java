@@ -35,6 +35,7 @@ public class Region {
 		MPolygon[] myRegions = myVoronoi.getRegions();
 		for (int i = 0; i < myRegions.length; i++) {
 			// an array of points
+			parent.fill(0,0,0,0);
 			myRegions[i].draw(parent); // draw this shape
 		}
 	}

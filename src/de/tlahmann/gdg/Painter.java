@@ -37,6 +37,7 @@ public class Painter extends PApplet {
 			particles.add(new Particle(this));
 		}
 		regions = new Region(this);
+		drawGradient(width / 2, height / 2, colors[0], colors[1]);
 	}
 
 	public void settings() {
@@ -44,16 +45,26 @@ public class Painter extends PApplet {
 	}
 
 	public void draw() {
-		background(colors[0]);
+		 background(colors[0]);
+//		drawGradient(width / 2, height / 2, colors[0], colors[1]);
 
 		// run the Regions before the points to be drawn properly
 		if (particles.size() > 1) {
 			runRegions();
 		}
-		
+
 		removeDead();
 		runParticles();
 		// createVoronoi();
+	}
+
+	void drawGradient(float x, float y, int c1, int c2) {
+		c1 = 0;
+		c2 = 255;
+		for (int r = (int) (width * 1.5f); r > 0; --r) {
+			fill(c1 + r * (c2 - c1));
+			ellipse(x, y, r, r);
+		}
 	}
 
 	public void mouseDragged() {
