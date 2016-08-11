@@ -9,7 +9,7 @@ import processing.core.PVector;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
 
-public class Voro extends PApplet {
+public class Painter extends PApplet {
 
 	private final int WIDTH = 800;
 	private final int HEIGHT = 800;
@@ -34,7 +34,7 @@ public class Voro extends PApplet {
 			colors[0][1] = colorBG.getInt("g");
 			colors[0][2] = colorBG.getInt("b");
 			colors[0][3] = colorBG.getInt("a");
-			
+
 			colors[1][0] = colorP.getInt("r");
 			colors[1][1] = colorP.getInt("g");
 			colors[1][2] = colorP.getInt("b");
@@ -43,7 +43,7 @@ public class Voro extends PApplet {
 
 		particles = new ArrayList<Particle>();
 		for (int i = 0; i < 2; i++) {
-			particles.add(new Particle());
+			particles.add(new Particle(this));
 		}
 		createVoronoi();
 	}
@@ -55,14 +55,14 @@ public class Voro extends PApplet {
 	public void draw() {
 		background(colors[0][0], colors[0][1], colors[0][2], colors[0][3]);
 
-//		particles.add(new Particle());
-		
+		// particles.add(new Particle());
+
 		// Wenn mindestens 1 Punkt vorhanden ist wird gezeichnet
 		if (particles.size() > 1) {
 
 			// getRegions
 			strokeWeight(2);
-			stroke(random(10,100), 150);
+			stroke(random(10, 100), 150);
 			MPolygon[] myRegions = myVoronoi.getRegions();
 			for (int i = 0; i < myRegions.length; i++) {
 				// an array of points
@@ -73,14 +73,12 @@ public class Voro extends PApplet {
 		// draw Points
 		for (Particle p : particles) {
 			// Gravity is scaled by mass here!
-			PVector gravity = new PVector(0, 1f * p.mass);
+			PVector gravity = new PVector(1f * p.MASS, 0);
 			// Apply gravity
 			p.applyForce(gravity);
 
 			// Update and display
-			p.update();
-			p.display();
-			p.checkEdges();
+			p.run();
 		}
 		calculateParticles();
 		createVoronoi();
@@ -104,90 +102,6 @@ public class Voro extends PApplet {
 	}
 
 	public static void main(String[] args) {
-		PApplet.main(new String[] { Voro.class.getName() });
-	}
-
-	public class Particle {
-		// location, velocity, and acceleration
-		public PVector location;
-		PVector velocity;
-		PVector acceleration;
-		PVector orientation;
-		public float lifespan;
-
-		// Mass is tied to size
-		public float mass;
-
-		final float MINIMALMASS = 0.5f;
-		final float MAXIMALMASS = 3;
-		final float MINIMALTTL = 10;
-		final float MAXIMALTTL = 255;
-		
-		final float MINIMALVELOCITY = 0.5f;
-		
-		
-		public Particle() {
-			mass = random(MINIMALMASS, MAXIMALMASS);
-			location = new PVector(random(0, width), random(0,height));
-			velocity = new PVector(0, 0);
-			acceleration = new PVector(0, 0);
-			orientation = new PVector(random(0, 360), 0);
-			lifespan = random(MINIMALTTL, MAXIMALTTL);
-		}
-		
-		public Particle(float m, float x, float y, float a, float t) {
-			mass = m;
-			location = new PVector(x, y);
-			velocity = new PVector(0, 0);
-			acceleration = new PVector(0, 0);
-			orientation = new PVector(random(0, 360), 0);
-			lifespan = a;
-		}
-
-		// Newton's 2nd law: F = M * A
-		// or A = F / M
-		public void applyForce(PVector force) {
-			// Divide by mass
-			PVector f = PVector.div(force, mass);
-			// Accumulate all forces in acceleration
-			acceleration.add(f);
-		}
-
-		public void update() {
-			// Velocity changes according to acceleration
-			velocity.add(acceleration);
-			// Location changes by velocity
-			location.add(velocity);
-			// We must clear acceleration each frame
-			acceleration.mult(0);
-			lifespan--;
-		}
-
-		// Draw Mover
-		public void display() {
-			stroke(colors[1][0], colors[1][1], colors[1][2], lifespan);
-			strokeWeight(mass * 5);
-			point(location.x, location.y);
-		}
-
-		// Bounce off edges of window
-		public void checkEdges() {
-			if (location.y > height || location.y < 0) {
-				velocity.y *= -0.9; // A little dampening when hitting the
-									// bottom
-			} else if (location.x > width || location.x < 0) {
-				velocity.x *= -0.9; // A little dampening when hitting the
-									// bottom
-			}
-		}
-		
-		// Is the particle still useful?
-		  boolean isDead() {
-		    if (lifespan < 0.0 || abs(velocity.y) < MINIMALVELOCITY) {
-		      return true;
-		    } else {
-		      return false;
-		    }
-		  }
+		PApplet.main(new String[] { Painter.class.getName() });
 	}
 }
