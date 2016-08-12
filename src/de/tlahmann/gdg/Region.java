@@ -30,12 +30,12 @@ public class Region {
 
 	public void display() {
 		// getRegions
-		parent.strokeWeight(2);
+		parent.strokeWeight(1);
 		parent.stroke(parent.random(10, 100), 150);
 		MPolygon[] myRegions = myVoronoi.getRegions();
 		for (int i = 0; i < myRegions.length; i++) {
 			// an array of points
-			parent.fill(0,0,0,0);
+			parent.noFill();
 			myRegions[i].draw(parent); // draw this shape
 		}
 	}
