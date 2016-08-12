@@ -14,11 +14,11 @@ public class Region {
 		parent = p;
 	}
 
-	public void run(ArrayList<Particle> p) {
-		update(p);
-		display(p);
+	public void run(ArrayList<Particle> ps) {
+		update(ps);
+		display(ps);
 	}
-	
+
 	public void update(ArrayList<Particle> particles) {
 		float[][] points = new float[particles.size()][2];
 		for (int i = 0; i < particles.size(); i++) {
@@ -35,7 +35,9 @@ public class Region {
 		MPolygon[] myRegions = myVoronoi.getRegions();
 		for (int i = 0; i < myRegions.length; i++) {
 			// an array of points
-			parent.fill(particles.get(i).color, 150);
+			Particle p = particles.get(i);
+			int c = p.fillRegion ? p.color : 255;
+			parent.fill(c);
 			myRegions[i].draw(parent); // draw this shape
 		}
 	}

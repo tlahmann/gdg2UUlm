@@ -12,11 +12,12 @@ public class Particle {
 	PVector acceleration;
 	float lifespan;
 	int color;
+	boolean fillRegion;
 
 	final float MASS;
 	final float MINMASS = 1f;
 	final float MAXMASS = 1.5f;
-	final float MINTTL = 100;
+	final float MINTTL = 200;
 	final float MAXTTL = 255;
 
 	final float MINVELOCITY = 0.5f;
@@ -34,10 +35,11 @@ public class Particle {
 		lifespan = parent.random(MINTTL, MAXTTL);
 	}
 
-	public Particle(PApplet p, float x, float y, int c) {
+	public Particle(PApplet p, float x, float y, int c, int f) {
 		this(p);
 
 		color = c;
+		fillRegion = (f == 1);
 		if (x > 0 && y > 0)
 			location = new PVector(x, y);
 	}
@@ -53,13 +55,14 @@ public class Particle {
 		velocity.add(acceleration);
 		// Location changes by velocity
 		location.add(velocity);
-		// We must clear acceleration each frame
 		acceleration.mult(0);
 		lifespan--;
 	}
 
 	// Draw particle
 	public void display() {
+		if (fillRegion)
+			return;
 		parent.stroke(color, lifespan);
 		parent.strokeWeight(MASS);
 		parent.point(location.x, location.y);
