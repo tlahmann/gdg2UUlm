@@ -2,8 +2,6 @@ package de.tlahmann.gdg;
 
 import java.util.ArrayList;
 
-import megamu.mesh.MPolygon;
-import megamu.mesh.Voronoi;
 import processing.core.PApplet;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
@@ -12,25 +10,33 @@ public class Painter extends PApplet {
 
 	private final int WIDTH = 800;
 	private final int HEIGHT = 800;
-	// Arraylist and Array um die Punkte zu speichen
+	
 	ArrayList<Particle> particles;
 	Region regions;
 	long lastSpawn = 0;
 
-	JSONArray values;
-	int cModel = 0;
+	JSONArray file;
 	int colorModel = 0;
-	int[] colors;
+	int backgroundColor;
+	int[] particleColors;
 
 	public void setup() {
-		values = loadJSONArray("./src/de/tlahmann/gdg/data/colors.json");
-		colors = new int[2];
-		JSONObject JColors = values.getJSONObject(colorModel);
+		file = loadJSONArray("./src/de/tlahmann/gdg/data/colors.json");
+
+		JSONObject JColors = file.getJSONObject(colorModel);
 
 		JSONObject colorBG = JColors.getJSONObject("background");
-		JSONObject colorP = JColors.getJSONObject("particles");
-		colors[0] = color(colorBG.getInt("r"), colorBG.getInt("g"), colorBG.getInt("b"), colorBG.getInt("a"));
-		colors[1] = color(colorP.getInt("r"), colorP.getInt("g"), colorP.getInt("b"), colorP.getInt("a"));
+		JSONArray colorP = JColors.getJSONArray("particles");
+		backgroundColor = color(colorBG.getInt("r"), colorBG.getInt("g"), colorBG.getInt("b"), colorBG.getInt("a"));
+
+		particleColors = new int[colorP.size()];
+		for (int i = 0; i < colorP.size(); i++) {
+			particleColors[i] = color(colorP.getJSONObject(i).getInt("r"), colorP.getJSONObject(i).getInt("g"),
+					colorP.getJSONObject(i).getInt("b"), colorP.getJSONObject(i).getInt("a"));
+		}
+
+		init();
+	}
 
 	void init() {
 		particles = new ArrayList<Particle>();
@@ -38,7 +44,6 @@ public class Painter extends PApplet {
 			particles.add(new Particle(this));
 		}
 		regions = new Region(this);
-		drawGradient(width / 2, height / 2, colors[0], colors[1]);
 	}
 
 	public void settings() {
@@ -46,7 +51,7 @@ public class Painter extends PApplet {
 	}
 
 	public void draw() {
-		background(colors[0]);
+		background(backgroundColor);
 
 		// run the Regions before the points to be drawn properly
 		if (particles.size() > 1) {
@@ -55,34 +60,28 @@ public class Painter extends PApplet {
 
 		removeDead();
 		runParticles();
-		// createVoronoi();
-	}
-
-	void drawGradient(float x, float y, int c1, int c2) {
-		c1 = 0;
-		c2 = 255;
-		for (int r = (int) (width * 1.5f); r > 0; --r) {
-			fill(c1 + r * (c2 - c1));
-			ellipse(x, y, r, r);
-		}
 	}
 
 	public void mouseDragged() {
 		if (lastSpawn + 10 > millis()) {
 			return;
 		}
-		particles.add(new Particle(this, mouseX, mouseY, colors[1]));
+		newParticle();
 		lastSpawn = millis();
 	}
 
 	public void mouseClicked() {
-		particles.add(new Particle(this, mouseX, mouseY, colors[(int) random(1, 4)]));
+		newParticle();
 	}
 
 	public void keyPressed() {
 		if (key == 'r' || key == 'R') {
 			init();
 		}
+	}
+
+	void newParticle() {
+		particles.add(new Particle(this, mouseX, mouseY, particleColors[(int) random(1, 4)]));
 	}
 
 	void removeDead() {
@@ -97,11 +96,6 @@ public class Painter extends PApplet {
 
 	void runParticles() {
 		for (Particle p : particles) {
-			// Gravity is scaled by mass here!
-			// PVector gravity = new PVector(1f * p.MASS, 0);
-			// Apply gravity
-			// p.applyForce(gravity);
-
 			// Update and display
 			p.run();
 		}

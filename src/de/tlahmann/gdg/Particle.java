@@ -58,7 +58,7 @@ public class Particle {
 		lifespan--;
 	}
 
-	// Draw Mover
+	// Draw particle
 	public void display() {
 		parent.stroke(color, lifespan);
 		parent.strokeWeight(MASS);
