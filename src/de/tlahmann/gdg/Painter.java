@@ -8,18 +8,18 @@ import processing.data.JSONObject;
 
 public class Painter extends PApplet {
 
-	private final int WIDTH = 800;
-	private final int HEIGHT = 800;
-	
+	private static final int WIDTH = 800;
+	private static final int HEIGHT = 800;
+
 	ArrayList<Particle> particles;
 	Region regions;
 	long lastSpawn = 0;
 
-	JSONArray file;
-	int colorModel = 1;
-	int backgroundColor;
-	int[] particleColors;
-	int fillRegion;
+	static JSONArray file;
+	static int colorModel = 1;
+	static int backgroundColor;
+	static int[] particleColors;
+	static int fillRegion;
 
 	public void setup() {
 		file = loadJSONArray("./src/de/tlahmann/gdg/data/colors.json");
@@ -29,12 +29,12 @@ public class Painter extends PApplet {
 		JSONObject colorBG = JColors.getJSONObject("background");
 		JSONArray colorP = JColors.getJSONArray("particles");
 		backgroundColor = color(colorBG.getInt("r"), colorBG.getInt("g"), colorBG.getInt("b"), colorBG.getInt("a"));
-		fillRegion = JColors.getInt("fill");
 		particleColors = new int[colorP.size()];
 		for (int i = 0; i < colorP.size(); i++) {
 			particleColors[i] = color(colorP.getJSONObject(i).getInt("r"), colorP.getJSONObject(i).getInt("g"),
 					colorP.getJSONObject(i).getInt("b"), colorP.getJSONObject(i).getInt("a"));
 		}
+		fillRegion = JColors.getInt("fill");
 
 		init();
 	}
