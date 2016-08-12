@@ -10,28 +10,27 @@ public class Particle {
 	PVector location;
 	PVector velocity;
 	PVector acceleration;
-	PVector orientation;
 	float lifespan;
 	int color;
 
-	final float SIZEMULTIPLICATOR = 5;
-
 	final float MASS;
 	final float MINMASS = 1f;
-	final float MAXMASS = 3;
+	final float MAXMASS = 1.5f;
 	final float MINTTL = 100;
 	final float MAXTTL = 255;
 
-	final float MINVELOCITY = 0.1f;
+	final float MINVELOCITY = 0.5f;
+	final float INITVELOCITY = 1.0f;
 
 	Particle(PApplet p) {
 		parent = p;
 
-		MASS = parent.random(MINMASS, MAXMASS);
+		final float SIZEMULTIPLICATOR = 5;
+		MASS = parent.random(MINMASS, MAXMASS) * SIZEMULTIPLICATOR;
 		location = new PVector(parent.random(0, parent.width), parent.random(0, parent.height));
-		velocity = new PVector(5f, 0);
 		acceleration = new PVector(0, 0);
-		orientation = new PVector(PApplet.radians(0), 0);
+		float orientation = PApplet.radians(parent.random(0, 360));
+		velocity = new PVector(INITVELOCITY * PApplet.sin(orientation), INITVELOCITY * PApplet.cos(orientation));
 		lifespan = parent.random(MINTTL, MAXTTL);
 	}
 
@@ -49,61 +48,35 @@ public class Particle {
 		checkEdges();
 	}
 
-	// Newton's 2nd law: F = M * A
-	// or A = F / M
-	public void applyForce(PVector force) {
-		// Divide by mass
-		PVector f = PVector.div(force, MASS);
-		// Accumulate all forces in acceleration
-		acceleration.add(f);
-	}
-
 	public void update() {
 		// Velocity changes according to acceleration
 		velocity.add(acceleration);
 		// Location changes by velocity
-		PVector foo = new PVector(velocity.x * PApplet.sin(orientation.x), velocity.x * PApplet.cos(orientation.x));
-		location.add(foo);
+		location.add(velocity);
 		// We must clear acceleration each frame
 		acceleration.mult(0);
-		// lifespan--;
+		lifespan--;
 	}
 
 	// Draw Mover
 	public void display() {
 		parent.stroke(color, lifespan);
-		parent.strokeWeight(MASS * SIZEMULTIPLICATOR);
+		parent.strokeWeight(MASS);
 		parent.point(location.x, location.y);
 	}
 
 	// Bounce off edges of window
 	public void checkEdges() {
-		if (location.y >= parent.height - MASS) {
-			// hit bottom
-			float angle = PVector.angleBetween(orientation, new PVector(1*PApplet.PI/2,0,0));
-			orientation.x += 2*(PApplet.PI-angle);
-			velocity.x *= 0.9f;
-		} else if (location.y <= 0 + MASS) {
-			// hit top
-			float angle = PVector.angleBetween(orientation, new PVector(3*PApplet.PI/2,0,0));
-			orientation.x += 2*(PApplet.PI-angle);
-			velocity.x *= 0.9f;
-		} else if (location.x >= parent.width - MASS) {
-			// hit right
-			float angle = PVector.angleBetween(orientation, new PVector(0*PApplet.PI/2,0,0));
-			orientation.x += 2*(PApplet.PI-angle);
-			velocity.x *= 0.9f;
-		} else if (location.x <= 0 + MASS) {
-			// hit left
-			float angle = PVector.angleBetween(orientation, new PVector(2*PApplet.PI/2,0,0));
-			orientation.x += 2*(PApplet.PI-angle);
-			velocity.x *= 0.9f;
+		if (location.y >= parent.height - MASS || location.y <= 0 + MASS) {
+			velocity.y *= -0.9f;
+		} else if (location.x >= parent.width - MASS || location.x <= 0 + MASS) {
+			velocity.x *= -0.9f;
 		}
 	}
 
 	// Is the particle still useful?
 	boolean isDead() {
-		if (lifespan < 0.0 || PApplet.abs(velocity.x) < MINVELOCITY) {
+		if (lifespan < 0.0 || PApplet.abs(velocity.mag()) < MINVELOCITY) {
 			return true;
 		} else {
 			return false;
