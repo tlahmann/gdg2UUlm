@@ -42,7 +42,7 @@ public class Painter extends PApplet {
 	void init() {
 		particles = new ArrayList<Particle>();
 		for (int i = 0; i < 10; i++) {
-			particles.add(new Particle(this));
+			newParticle(0, 0);
 		}
 		regions = new Region(this);
 	}
@@ -67,12 +67,12 @@ public class Painter extends PApplet {
 		if (lastSpawn + 10 > millis()) {
 			return;
 		}
-		newParticle();
+		newParticle(mouseX, mouseY);
 		lastSpawn = millis();
 	}
 
 	public void mouseClicked() {
-		newParticle();
+		newParticle(mouseX, mouseY);
 	}
 
 	public void keyPressed() {
@@ -81,8 +81,8 @@ public class Painter extends PApplet {
 		}
 	}
 
-	void newParticle() {
-		particles.add(new Particle(this, mouseX, mouseY, particleColors[(int) random(1, 4)]));
+	void newParticle(int x, int y) {
+		particles.add(new Particle(this, x, y, particleColors[(int) random(0, particleColors.length)], fillRegion));
 	}
 
 	void removeDead() {
