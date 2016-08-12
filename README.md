@@ -1,5 +1,32 @@
 # gdg2UUlm
+### Basics of Design Project, Ulm University
 
-Grundlagen der Gestaltung Projekt der Uni Ulm
+The second course *basics of design* conveys the principles of size, shape, position and color extended to moving pictures. 
 
-Neuauflage im 6. Semester
+----
+
+### General Information
+
+This project is using the processing library to animate.
+
+The project is written using the Eclipse IDE
+
+----
+
+### Installation
+
+* Clone the Repository
+* Import the [processing core](https://processing.org/tutorials/eclipse/)
+* Import the [mesh library](http://leebyron.com/mesh/)
+
+----
+
+### Licensing
+
+Read LICENSE.txt for license information.
+
+----
+
+### Contacts
+
+Please contact me under [tobias.lahmann@gmail.com](tobias.lahmann@gmail.com)
