@@ -32,8 +32,9 @@ public class Painter extends PApplet {
 		colors[0] = color(colorBG.getInt("r"), colorBG.getInt("g"), colorBG.getInt("b"), colorBG.getInt("a"));
 		colors[1] = color(colorP.getInt("r"), colorP.getInt("g"), colorP.getInt("b"), colorP.getInt("a"));
 
+	void init() {
 		particles = new ArrayList<Particle>();
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < 10; i++) {
 			particles.add(new Particle(this));
 		}
 		regions = new Region(this);
@@ -46,7 +47,6 @@ public class Painter extends PApplet {
 
 	public void draw() {
 		background(colors[0]);
-		// drawGradient(width / 2, height / 2, colors[0], colors[1]);
 
 		// run the Regions before the points to be drawn properly
 		if (particles.size() > 1) {
@@ -73,6 +73,16 @@ public class Painter extends PApplet {
 		}
 		particles.add(new Particle(this, mouseX, mouseY, colors[1]));
 		lastSpawn = millis();
+	}
+
+	public void mouseClicked() {
+		particles.add(new Particle(this, mouseX, mouseY, colors[(int) random(1, 4)]));
+	}
+
+	public void keyPressed() {
+		if (key == 'r' || key == 'R') {
+			init();
+		}
 	}
 
 	void removeDead() {
