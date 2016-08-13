@@ -1,4 +1,4 @@
-package de.tlahmann.gdg;
+package net.tlahmann.gdg;
 
 import java.util.ArrayList;
 

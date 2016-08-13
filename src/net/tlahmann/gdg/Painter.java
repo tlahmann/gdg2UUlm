@@ -1,4 +1,4 @@
-package de.tlahmann.gdg;
+package net.tlahmann.gdg;
 
 import java.util.ArrayList;
 
@@ -22,7 +22,7 @@ public class Painter extends PApplet {
 	static int fillRegion;
 
 	public void setup() {
-		file = loadJSONArray("./src/de/tlahmann/gdg/data/colors.json");
+		file = loadJSONArray("./src/net/tlahmann/gdg/data/colors.json");
 
 		JSONObject JColors = file.getJSONObject(colorModel);
 

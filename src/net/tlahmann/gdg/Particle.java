@@ -1,4 +1,4 @@
-package de.tlahmann.gdg;
+package net.tlahmann.gdg;
 
 import processing.core.PApplet;
 import processing.core.PVector;
