@@ -20,7 +20,7 @@ public class Painter extends PApplet {
 	static JSONArray file;
 	static int colorModel = 0;
 	static int backgroundColor;
-	static int[] particleColors;
+	static int[][] particleColors;
 	static int fillRegion;
 
 	// Instanz die das geladene Audiodokument repräsentiert
@@ -34,10 +34,12 @@ public class Painter extends PApplet {
 		JSONObject colorBG = JColors.getJSONObject("background");
 		JSONArray colorP = JColors.getJSONArray("particles");
 		backgroundColor = color(colorBG.getInt("r"), colorBG.getInt("g"), colorBG.getInt("b"), colorBG.getInt("a"));
-		particleColors = new int[colorP.size()];
+		particleColors = new int[colorP.size()][4];
 		for (int i = 0; i < colorP.size(); i++) {
-			particleColors[i] = color(colorP.getJSONObject(i).getInt("r"), colorP.getJSONObject(i).getInt("g"),
-					colorP.getJSONObject(i).getInt("b"), colorP.getJSONObject(i).getInt("a"));
+			particleColors[i][0] = colorP.getJSONObject(i).getInt("r");
+			particleColors[i][1] = colorP.getJSONObject(i).getInt("g");
+			particleColors[i][2] = colorP.getJSONObject(i).getInt("b");
+			particleColors[i][3] = colorP.getJSONObject(i).getInt("a");
 		}
 		fillRegion = JColors.getInt("fill");
 
@@ -90,7 +92,8 @@ public class Painter extends PApplet {
 	}
 
 	void newParticle(int x, int y) {
-		particles.add(new Particle(this, x, y, particleColors[(int) random(0, particleColors.length)], fillRegion));
+		int i = (int) random(0, particleColors.length);
+		particles.add(new Particle(this, x, y, particleColors[i], fillRegion));
 	}
 
 	void removeDead() {

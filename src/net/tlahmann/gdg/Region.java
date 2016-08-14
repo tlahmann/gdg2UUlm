@@ -7,10 +7,10 @@ import megamu.mesh.Voronoi;
 import processing.core.PApplet;
 
 public class Region {
-	PApplet parent;
+	Painter parent;
 	Voronoi myVoronoi;
 
-	Region(PApplet p) {
+	Region(Painter p) {
 		parent = p;
 	}
 
@@ -36,7 +36,7 @@ public class Region {
 		for (int i = 0; i < myRegions.length; i++) {
 			// an array of points
 			Particle p = particles.get(i);
-			int c = p.fillRegion ? p.color : 255;
+			int c = p.fillRegion ? parent.color(p.color[0], p.color[1], p.color[2], p.lifespan) : parent.backgroundColor;
 			parent.fill(c);
 			myRegions[i].draw(parent); // draw this shape
 		}

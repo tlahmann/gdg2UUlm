@@ -11,7 +11,7 @@ public class Particle {
 	PVector velocity;
 	PVector acceleration;
 	float lifespan;
-	int color;
+	int[] color;
 	boolean fillRegion;
 
 	final float MASS;
@@ -35,7 +35,7 @@ public class Particle {
 		lifespan = parent.random(MINTTL, MAXTTL);
 	}
 
-	public Particle(PApplet p, float x, float y, int c, int f) {
+	public Particle(PApplet p, float x, float y, int[] c, int f) {
 		this(p);
 
 		color = c;
@@ -57,13 +57,15 @@ public class Particle {
 		location.add(velocity);
 		acceleration.mult(0);
 		lifespan--;
+		// color = parent.color(color[0], color[1], color[2], lifespan--);
+		// System.out.println(color);
 	}
 
 	// Draw particle
 	public void display() {
 		if (fillRegion)
 			return;
-		parent.stroke(color, lifespan);
+		parent.stroke(color[0], color[1], color[2], lifespan--);
 		parent.strokeWeight(MASS);
 		parent.point(location.x, location.y);
 	}
