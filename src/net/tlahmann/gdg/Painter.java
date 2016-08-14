@@ -2,6 +2,8 @@ package net.tlahmann.gdg;
 
 import java.util.ArrayList;
 
+import ddf.minim.AudioPlayer;
+import ddf.minim.Minim;
 import processing.core.PApplet;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
@@ -16,10 +18,13 @@ public class Painter extends PApplet {
 	long lastSpawn = 0;
 
 	static JSONArray file;
-	static int colorModel = 1;
+	static int colorModel = 0;
 	static int backgroundColor;
 	static int[] particleColors;
 	static int fillRegion;
+
+	// Instanz die das geladene Audiodokument repräsentiert
+	static AudioPlayer player;
 
 	public void setup() {
 		file = loadJSONArray("./src/net/tlahmann/gdg/data/colors.json");
@@ -35,6 +40,9 @@ public class Painter extends PApplet {
 					colorP.getJSONObject(i).getInt("b"), colorP.getJSONObject(i).getInt("a"));
 		}
 		fillRegion = JColors.getInt("fill");
+
+		player = new Minim(this).loadFile("./src/net/tlahmann/gdg/data/song.mp3");
+		player.play();
 
 		init();
 	}
