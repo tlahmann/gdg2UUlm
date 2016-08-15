@@ -83,26 +83,34 @@ public class Particle {
 		for (Particle p : parent.particles) {
 			if (p == this)
 				continue;
-			double dist = PVector.dist(this.location, p.location);
+			float dist = PVector.dist(this.location, p.location);
 			if (dist < this.MASS + p.MASS) {
-				float angle = PVector.angleBetween(this.velocity, p.velocity);
-				float cosa = PApplet.cos(angle);
-				float sina = PApplet.sin(angle);
-				float px1 = cosa * this.velocity.x + sina * this.velocity.y;
-				float py1 = cosa * this.velocity.y - sina * this.velocity.x;
-				float px2 = cosa * p.velocity.x + sina * p.velocity.y;
-				float py2 = cosa * p.velocity.y - sina * p.velocity.x;
-				this.velocity = new PVector(px2, py2, 0);
-				p.velocity = new PVector(px1, py1, 0);
+				float newVelX1 = (this.velocity.x * (this.MASS - p.MASS) + (2 * p.MASS * p.velocity.x))
+						/ (this.MASS + p.MASS);
+				float newVelY1 = (this.velocity.y * (this.MASS - p.MASS) + (2 * p.MASS * p.velocity.y))
+						/ (this.MASS + p.MASS);
+				float newVelX2 = (p.velocity.x * (p.MASS - this.MASS) + (2 * this.MASS * this.velocity.x))
+						/ (this.MASS + p.MASS);
+				float newVelY2 = (p.velocity.y * (p.MASS - this.MASS) + (2 * this.MASS * this.velocity.y))
+						/ (this.MASS + p.MASS);
+				this.velocity.mult(0);
+				this.velocity.add(new PVector(newVelX1, newVelY1));
+				p.velocity.mult(0);
+				p.velocity.add(new PVector(newVelX2, newVelY2));
+			}
 			}
 		}
 	}
 
 	// Bounce off edges of window
 	public void checkEdges() {
-		if (location.y >= parent.height - MASS || location.y <= 0 + MASS) {
+		if (location.y >= parent.height - MASS && velocity.y > 0) {
 			velocity.y *= -0.9f;
-		} else if (location.x >= parent.width - MASS || location.x <= 0 + MASS) {
+		} else if (location.y <= 0 + MASS && velocity.y < 0) {
+			velocity.y *= -0.9f;
+		} else if (location.x >= parent.width - MASS && velocity.x > 0) {
+			velocity.x *= -0.9f;
+		} else if (location.x <= 0 + MASS && velocity.x < 0) {
 			velocity.x *= -0.9f;
 		}
 	}
