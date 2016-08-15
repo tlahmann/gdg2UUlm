@@ -14,8 +14,8 @@ public class Particle {
 	float[] color;
 
 	final float MASS;
-	final float MINMASS = 1f;
-	final float MAXMASS = 5.5f;
+	final float MINMASS = 2f;
+	final float MAXMASS = 20f;
 	final float MAXTTL = 255;
 
 	float minVelocity;
@@ -98,6 +98,8 @@ public class Particle {
 				p.velocity.mult(0);
 				p.velocity.add(new PVector(newVelX2, newVelY2));
 			}
+			if (dist < (this.MASS + p.MASS) * 0.90f) {
+//				unstuck(p.location, dist - (this.MASS + p.MASS));
 			}
 		}
 	}
@@ -113,6 +115,16 @@ public class Particle {
 		} else if (location.x <= 0 + MASS && velocity.x < 0) {
 			velocity.x *= -0.9f;
 		}
+	}
+
+	void unstuck(PVector o, float v) {
+//		new PVector(-o.y,o.x,o.z).normalize().mult(v);
+//		float angle = PVector.angleBetween(this.velocity, p.velocity);
+//		float cosa = PApplet.cos(angle);
+//		float sina = PApplet.sin(angle);
+//		float px1 = cosa * this.velocity.x + sina * this.velocity.y;
+		// cosa * this.velocity.x + sina * this.velocity.y;
+		this.location.add(new PVector(-o.y,o.x,o.z).normalize().mult(v));
 	}
 
 	// Is the particle still useful?
