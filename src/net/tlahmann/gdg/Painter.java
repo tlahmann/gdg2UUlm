@@ -18,6 +18,9 @@ public class Painter extends PApplet {
 	Region regions;
 	long lastSpawn = 0;
 
+	int cx, cy;
+	float secondsRadius;
+
 	static JSONArray file;
 	static int colorModel = 0;
 	int backgroundColor;
@@ -44,7 +47,7 @@ public class Painter extends PApplet {
 		}
 
 		player = new Minim(this).loadFile("./src/net/tlahmann/gdg/data/song.mp3");
-//		player.play();
+		// player.play();
 
 		init();
 	}
@@ -53,9 +56,14 @@ public class Painter extends PApplet {
 		particles = new ArrayList<Particle>();
 		deadParticles = new ArrayList<Particle>();
 		for (int i = 0; i < 10; i++) {
-			newParticle(new float[] {0, 0});
+			newParticle(new float[] { 0, 0 });
 		}
 		regions = new Region(this);
+
+		int radius = min(width, height) / 2;
+		secondsRadius = radius * 0.72f;
+		cx = width / 2;
+		cy = height / 2;
 	}
 
 	public void settings() {
@@ -72,18 +80,26 @@ public class Painter extends PApplet {
 
 		removeDead();
 		runParticles();
+		spawner();
+	}
+
+	void spawner() {
+		float s = map(millis(), 0, 1000, 0, TWO_PI) - HALF_PI;
+		stroke(0);
+		strokeWeight(1);
+		newParticle(new float[]{ cx + cos(s) * secondsRadius, cy + sin(s) * secondsRadius});
 	}
 
 	public void mouseDragged() {
 		if (lastSpawn + 10 > millis()) {
 			return;
 		}
-		newParticle(new float[] {mouseX, mouseY});
+		newParticle(new float[] { mouseX, mouseY });
 		lastSpawn = millis();
 	}
 
 	public void mouseClicked() {
-		newParticle(new float[] {mouseX, mouseY});
+		newParticle(new float[] { mouseX, mouseY });
 	}
 
 	public void keyPressed() {
