@@ -15,7 +15,7 @@ public class Particle {
 
 	final float MASS;
 	final float MINMASS = 1f;
-	final float MAXMASS = 1.5f;
+	final float MAXMASS = 5.5f;
 	final float MAXTTL = 255;
 
 	float minVelocity;
@@ -33,8 +33,11 @@ public class Particle {
 	public Particle(Painter p, float[] loc, float[] c, float v, int t) {
 		parent = p;
 
-		location = new PVector(loc[0] == 0 ? parent.random(0, parent.width) : loc[0],
-				loc[1] == 0 ? parent.random(0, parent.height) : loc[1]);
+		final float SIZEMULTIPLICATOR = 5;
+		MASS = parent.random(MINMASS, MAXMASS) * SIZEMULTIPLICATOR;
+
+		location = new PVector(loc[0] == 0 ? parent.random(0 + MASS * 2, parent.width - MASS * 2) : loc[0],
+				loc[1] == 0 ? parent.random(0 + MASS * 2, parent.height - MASS * 2) : loc[1]);
 
 		color = c == new float[] { 0 } ? new float[] { 0, 0, 0, 255, 0 } : c.clone();
 
@@ -44,8 +47,6 @@ public class Particle {
 
 		lifespan = t == -1 ? -1 : t != 0 ? (MAXTTL / t) * parent.random(0.95f, 1.05f) : 1;
 
-		final float SIZEMULTIPLICATOR = 5;
-		MASS = parent.random(MINMASS, MAXMASS) * SIZEMULTIPLICATOR;
 		acceleration = new PVector(0, 0);
 		minVelocity = velocity.mag() / 5;
 	}
@@ -53,6 +54,7 @@ public class Particle {
 	public void run() {
 		update();
 		display();
+		checkCollision();
 		checkEdges();
 	}
 
@@ -73,8 +75,27 @@ public class Particle {
 		if (color[4] == 1)
 			return;
 		parent.stroke(color[0], color[1], color[2], color[3]);
-		parent.strokeWeight(MASS);
+		parent.strokeWeight(MASS * 2);
 		parent.point(location.x, location.y);
+	}
+
+	public void checkCollision() {
+		for (Particle p : parent.particles) {
+			if (p == this)
+				continue;
+			double dist = PVector.dist(this.location, p.location);
+			if (dist < this.MASS + p.MASS) {
+				float angle = PVector.angleBetween(this.velocity, p.velocity);
+				float cosa = PApplet.cos(angle);
+				float sina = PApplet.sin(angle);
+				float px1 = cosa * this.velocity.x + sina * this.velocity.y;
+				float py1 = cosa * this.velocity.y - sina * this.velocity.x;
+				float px2 = cosa * p.velocity.x + sina * p.velocity.y;
+				float py2 = cosa * p.velocity.y - sina * p.velocity.x;
+				this.velocity = new PVector(px2, py2, 0);
+				p.velocity = new PVector(px1, py1, 0);
+			}
+		}
 	}
 
 	// Bounce off edges of window
