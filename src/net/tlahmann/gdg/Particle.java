@@ -18,7 +18,7 @@ public class Particle {
 	final float MAXMASS = 1.5f;
 	final float MAXTTL = 255;
 
-	final float MINVELOCITY = 0.2f;
+	float minVelocity;
 	final float INITVELOCITY = 0.6f;
 
 	/**
@@ -42,11 +42,12 @@ public class Particle {
 		velocity = new PVector((v == -1 ? INITVELOCITY : v) * PApplet.sin(orientation),
 				(v == -1 ? INITVELOCITY : v) * PApplet.cos(orientation));
 
-		lifespan = t == -1 ? -1 : t != 0 ? MAXTTL / t : 1;
+		lifespan = t == -1 ? -1 : t != 0 ? (MAXTTL / t) * parent.random(0.95f, 1.05f) : 1;
 
 		final float SIZEMULTIPLICATOR = 5;
 		MASS = parent.random(MINMASS, MAXMASS) * SIZEMULTIPLICATOR;
 		acceleration = new PVector(0, 0);
+		minVelocity = velocity.mag() / 5;
 	}
 
 	public void run() {
@@ -87,7 +88,7 @@ public class Particle {
 
 	// Is the particle still useful?
 	boolean isDead() {
-		if ((lifespan != -1 && color[3] < 0.0) || PApplet.abs(velocity.mag()) < MINVELOCITY) {
+		if ((lifespan != -1 && color[3] < 0.0) || PApplet.abs(velocity.mag()) < minVelocity) {
 			return true;
 		} else {
 			return false;
