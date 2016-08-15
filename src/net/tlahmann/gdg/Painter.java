@@ -14,6 +14,7 @@ public class Painter extends PApplet {
 	private static final int HEIGHT = 800;
 
 	ArrayList<Particle> particles;
+	ArrayList<Particle> deadParticles;
 	Region regions;
 	long lastSpawn = 0;
 
@@ -51,6 +52,7 @@ public class Painter extends PApplet {
 
 	void init() {
 		particles = new ArrayList<Particle>();
+		deadParticles = new ArrayList<Particle>();
 		for (int i = 0; i < 10; i++) {
 			newParticle(0, 0);
 		}
@@ -97,13 +99,7 @@ public class Painter extends PApplet {
 	}
 
 	void removeDead() {
-		// Cycle through the ArrayList backwards, because we are deleting while
-		// iterating
-		for (int i = particles.size() - 1; i >= 0; i--) {
-			if (particles.get(i).isDead()) {
-				particles.remove(i);
-			}
-		}
+		particles.removeAll(deadParticles);
 	}
 
 	void runParticles() {

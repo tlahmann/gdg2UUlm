@@ -57,8 +57,9 @@ public class Particle {
 		location.add(velocity);
 		acceleration.mult(0);
 		lifespan--;
-		// color = parent.color(color[0], color[1], color[2], lifespan--);
-		// System.out.println(color);
+		if (isDead()) {
+			parent.deadParticles.add(this);
+		}
 	}
 
 	// Draw particle
