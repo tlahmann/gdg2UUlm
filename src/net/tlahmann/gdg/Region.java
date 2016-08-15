@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import megamu.mesh.MPolygon;
 import megamu.mesh.Voronoi;
-import processing.core.PApplet;
 
 public class Region {
 	Painter parent;
@@ -36,7 +35,7 @@ public class Region {
 		for (int i = 0; i < myRegions.length; i++) {
 			// an array of points
 			Particle p = particles.get(i);
-			int c = p.fillRegion ? parent.color(p.color[0], p.color[1], p.color[2], p.lifespan) : parent.backgroundColor;
+			int c = p.color[4] == 1 ? parent.color(p.color[0], p.color[1], p.color[2], p.color[3]) : parent.backgroundColor;
 			parent.fill(c);
 			myRegions[i].draw(parent); // draw this shape
 		}
