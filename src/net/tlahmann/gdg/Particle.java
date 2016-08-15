@@ -14,6 +14,8 @@ public class Particle {
 	float[] color;
 
 	final float MASS;
+	final float MINMASS = 0.2f;
+	final float MAXMASS = 0.5f;
 	final float MAXTTL = 255;
 	final float FRICTIONLOSS = 0.9f;
 
