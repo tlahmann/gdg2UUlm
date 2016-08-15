@@ -30,7 +30,7 @@ public class Particle {
 	 * @param v velocity; (-1) for default
 	 * @param t lifespawn in frames; (-1) for infinite
 	 */
-	public Particle(Painter p, float[] loc, float[] c, int v, int t) {
+	public Particle(Painter p, float[] loc, float[] c, float v, int t) {
 		parent = p;
 
 		location = new PVector(loc[0] == 0 ? parent.random(0, parent.width) : loc[0],

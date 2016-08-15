@@ -94,7 +94,7 @@ public class Painter extends PApplet {
 
 	void newParticle(float[] l) {
 		int i = (int) random(0, particleColors.length);
-		particles.add(new Particle(this, l, particleColors[i], 1, 1000));
+		particles.add(new Particle(this, l, particleColors[i], 0.5f, 300));
 	}
 
 	void removeDead() {
