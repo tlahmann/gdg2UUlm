@@ -22,7 +22,7 @@ public class Painter extends PApplet {
 	float secondsRadius;
 
 	static JSONArray file;
-	static int colorModel = 0;
+	static int colorModel = 2;
 	int backgroundColor;
 	static float[][] particleColors;
 	static int fillRegion;
@@ -84,10 +84,16 @@ public class Painter extends PApplet {
 	}
 
 	void spawner() {
+		if (lastSpawn + 1000 < millis()) {
+			float x = random(0, WIDTH);
+			float y = random(0, HEIGHT);
+			newParticle(new float[] { x, y });
+			lastSpawn = millis();
+		}
 		float s = map(millis(), 0, 1000, 0, TWO_PI) - HALF_PI;
 		stroke(0);
 		strokeWeight(1);
-		newParticle(new float[]{ cx + cos(s) * secondsRadius, cy + sin(s) * secondsRadius});
+		newParticle(new float[] { cx + cos(s) * secondsRadius, cy + sin(s) * secondsRadius });
 	}
 
 	public void mouseDragged() {
