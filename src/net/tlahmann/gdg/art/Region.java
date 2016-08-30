@@ -1,4 +1,4 @@
-package net.tlahmann.gdg;
+package net.tlahmann.gdg.art;
 
 import java.util.ArrayList;
 
