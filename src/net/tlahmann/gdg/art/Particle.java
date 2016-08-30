@@ -18,6 +18,7 @@ public class Particle {
 	final float MAXMASS = 0.5f;
 	final float MAXTTL = 255;
 	final float FRICTIONLOSS = 0.9f;
+	final boolean staticParticle;
 
 	float minVelocity;
 	final float INITVELOCITY = 0.6f;
@@ -28,14 +29,15 @@ public class Particle {
 	 * @param p parent object
 	 * @param loc location of the particle; {-1,-1} for random
 	 * @param c color: {r, g, b, a, fillregion}; {0} for b/w
-	 * @param v velocity; (-1) for default
-	 * @param t lifespawn in frames; (-1) for infinite
+	 * @param v velocity; {-1} for default, {0} for static
+	 * @param t lifespawn in frames; {-1} for infinite
 	 */
 	public Particle(Painter p, float[] loc, float[] c, float v, int t) {
 		parent = p;
 
 		final float SIZEMULTIPLICATOR = 5;
-		MASS = parent.random(MINMASS, MAXMASS) * SIZEMULTIPLICATOR;
+		staticParticle = v == 0;
+		MASS = staticParticle ? 0 : parent.random(MINMASS, MAXMASS) * SIZEMULTIPLICATOR;
 
 		location = new PVector(loc[0] == -1 ? parent.random(0 + MASS * 2, parent.width - MASS * 2) : loc[0],
 				loc[1] == -1 ? parent.random(0 + MASS * 2, parent.height - MASS * 2) : loc[1]);
@@ -82,7 +84,7 @@ public class Particle {
 
 	public void checkCollision() {
 		for (Particle p : parent.particles) {
-			if (p == this)
+			if (p == this || p.staticParticle || this.staticParticle)
 				continue;
 			double dist = PVector.dist(this.location, p.location);
 			if (dist < this.MASS + p.MASS) {

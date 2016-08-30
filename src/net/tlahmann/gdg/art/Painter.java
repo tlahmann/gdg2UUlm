@@ -49,6 +49,8 @@ public class Painter extends PApplet {
 		player = new Minim(this).loadFile("./src/net/tlahmann/gdg/data/song.mp3");
 		// player.play();
 
+		frameRate(60);
+
 		init();
 	}
 
@@ -57,7 +59,6 @@ public class Painter extends PApplet {
 		deadParticles = new ArrayList<Particle>();
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				System.out.println(i * width / 2 + " :: "+ j * height / 2 + "");
 				newParticle(new float[] { i * width / 2, j * height / 2 }, 0.0f, -1);
 			}
 		}
@@ -84,14 +85,17 @@ public class Painter extends PApplet {
 
 		removeDead();
 		runParticles();
-		// spawner();
+		spawner();
 	}
 
 	void spawner() {
-		if (lastSpawn + 5000 < millis()) {
-			float x = random(0, WIDTH);
-			float y = random(0, HEIGHT);
-			newParticle(new float[] { x, y }, 0.0f, -1);
+		if (lastSpawn + 500 < millis()) {
+			for (int i = 0; i < 50; i++) {
+				float x = random(0, WIDTH);
+				float y = random(0, HEIGHT);
+
+				newParticle(new float[] { x, y }, 0.2f, 30);
+			}
 			lastSpawn = millis();
 		}
 		float s = map(millis(), 0, 1000, 0, TWO_PI) - HALF_PI;
