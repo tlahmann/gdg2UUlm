@@ -22,7 +22,7 @@ public class Painter extends PApplet {
 	float secondsRadius;
 
 	static JSONArray file;
-	static int colorModel = 2;
+	static int colorModel = 0;
 	int backgroundColor;
 	static float[][] particleColors;
 	static int fillRegion;
@@ -55,9 +55,13 @@ public class Painter extends PApplet {
 	void init() {
 		particles = new ArrayList<Particle>();
 		deadParticles = new ArrayList<Particle>();
-		for (int i = 0; i < 10; i++) {
-			newParticle(new float[] { 0, 0 });
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				System.out.println(i * width / 2 + " :: "+ j * height / 2 + "");
+				newParticle(new float[] { i * width / 2, j * height / 2 }, 0.0f, -1);
+			}
 		}
+
 		regions = new Region(this);
 
 		int radius = min(width, height) / 2;
@@ -80,11 +84,11 @@ public class Painter extends PApplet {
 
 		removeDead();
 		runParticles();
-		spawner();
+		// spawner();
 	}
 
 	void spawner() {
-		if (lastSpawn + 1000 < millis()) {
+		if (lastSpawn + 5000 < millis()) {
 			float x = random(0, WIDTH);
 			float y = random(0, HEIGHT);
 			newParticle(new float[] { x, y });

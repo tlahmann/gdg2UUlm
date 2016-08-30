@@ -26,7 +26,7 @@ public class Particle {
 	 * Particle element constructor
 	 * 
 	 * @param p parent object
-	 * @param loc location of the particle; {0,0} for random
+	 * @param loc location of the particle; {-1,-1} for random
 	 * @param c color: {r, g, b, a, fillregion}; {0} for b/w
 	 * @param v velocity; (-1) for default
 	 * @param t lifespawn in frames; (-1) for infinite
@@ -37,8 +37,8 @@ public class Particle {
 		final float SIZEMULTIPLICATOR = 5;
 		MASS = parent.random(MINMASS, MAXMASS) * SIZEMULTIPLICATOR;
 
-		location = new PVector(loc[0] == 0 ? parent.random(0 + MASS * 2, parent.width - MASS * 2) : loc[0],
-				loc[1] == 0 ? parent.random(0 + MASS * 2, parent.height - MASS * 2) : loc[1]);
+		location = new PVector(loc[0] == -1 ? parent.random(0 + MASS * 2, parent.width - MASS * 2) : loc[0],
+				loc[1] == -1 ? parent.random(0 + MASS * 2, parent.height - MASS * 2) : loc[1]);
 
 		color = c == new float[] { 0 } ? new float[] { 0, 0, 0, 255, 0 } : c.clone();
 
