@@ -15,6 +15,7 @@ public class HScrollbar {
 	boolean over; // is the mouse over the slider?
 	boolean locked;
 	float ratio;
+	public String text;
 
 	public HScrollbar(Patterizer p, float xp, float yp, int sw, int sh, int l) {
 		parent = p;
@@ -75,7 +76,7 @@ public class HScrollbar {
 		
 		parent.fill(255);
 		parent.textFont(parent.f14);
-		parent.text(parent.numberOfArms, xpos + swidth, ypos + sheight );
+		parent.text(text, xpos + swidth, ypos + sheight );
 	}
 
 	public float getPos() {
