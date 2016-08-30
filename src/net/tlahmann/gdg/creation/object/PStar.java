@@ -1,14 +1,15 @@
 package net.tlahmann.gdg.creation.object;
 
+import net.tlahmann.gdg.creation.Patterizer;
 import processing.core.PApplet;
 import processing.core.PVector;
 
 public class PStar {
-	private PApplet parent;
+	private Patterizer parent;
 	private PVector[] points;
 	private PVector center;
 
-	public PStar(PApplet p, float[] pos, int rad, int ends) {
+	public PStar(Patterizer p, float[] pos, int rad, int ends) {
 		parent = p;
 
 		center = new PVector(pos[0], pos[1], 0);
@@ -23,7 +24,7 @@ public class PStar {
 	public void display() {
 		parent.stroke(255);
 		parent.strokeCap(PApplet.SQUARE);
-		parent.strokeWeight(3);
+		parent.strokeWeight(parent.thickness.x);
 		for (int i = 0; i < points.length; i++) {
 			parent.line(center.x, center.y, points[i].x, points[i].y);
 		}
