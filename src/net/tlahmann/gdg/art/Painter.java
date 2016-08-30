@@ -91,25 +91,25 @@ public class Painter extends PApplet {
 		if (lastSpawn + 5000 < millis()) {
 			float x = random(0, WIDTH);
 			float y = random(0, HEIGHT);
-			newParticle(new float[] { x, y });
+			newParticle(new float[] { x, y }, 0.0f, -1);
 			lastSpawn = millis();
 		}
 		float s = map(millis(), 0, 1000, 0, TWO_PI) - HALF_PI;
 		stroke(0);
 		strokeWeight(1);
-		newParticle(new float[] { cx + cos(s) * secondsRadius, cy + sin(s) * secondsRadius });
+		newParticle(new float[] { cx + cos(s) * secondsRadius, cy + sin(s) * secondsRadius }, 0.1f, 200);
 	}
 
 	public void mouseDragged() {
 		if (lastSpawn + 10 > millis()) {
 			return;
 		}
-		newParticle(new float[] { mouseX, mouseY });
+		newParticle(new float[] { mouseX, mouseY }, 0.2f, 300);
 		lastSpawn = millis();
 	}
 
 	public void mouseClicked() {
-		newParticle(new float[] { mouseX, mouseY });
+		newParticle(new float[] { mouseX, mouseY }, 0.2f, 300);
 	}
 
 	public void keyPressed() {
@@ -118,9 +118,9 @@ public class Painter extends PApplet {
 		}
 	}
 
-	void newParticle(float[] l) {
+	void newParticle(float[] l, float v, int t) {
 		int i = (int) random(0, particleColors.length);
-		particles.add(new Particle(this, l, particleColors[i], 0.5f, 300));
+		particles.add(new Particle(this, l, particleColors[i], v, t));
 	}
 
 	void removeDead() {
