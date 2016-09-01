@@ -2,7 +2,9 @@ package net.tlahmann.gdg.creation;
 
 import java.util.List;
 
+import controlP5.ColorPicker;
 import controlP5.ControlEvent;
+import controlP5.ControlFont;
 import controlP5.ControlP5;
 import net.tlahmann.gdg.creation.helper.Tuple;
 import net.tlahmann.gdg.creation.object.PCircle;
@@ -18,12 +20,17 @@ public class Patterizer extends PApplet {
 	private static final int WIDTH = 1024;
 	private static final int HEIGHT = 720;
 
-	public PFont f14, f20;
+	public PFont f08, f20;
+	float length, rotation;
+	public Tuple<Float, Float> offset;
 	public Tuple<Integer, Integer> numberOfArms;
 	public Tuple<Integer, Integer> thickness;
 	public Tuple<Integer, Integer> colors;
 	ControlP5 cp5;
 	float guiTimeout = 0;
+
+	ColorPicker colorPickerF;
+	ColorPicker colorPickerB;
 
 	List<PStar> stars;
 	List<PCircle> circles;
@@ -31,8 +38,11 @@ public class Patterizer extends PApplet {
 	public void setup() {
 		// Create font
 		f20 = createFont("./src/net/tlahmann/gdg/data/OpenSans-Regular.ttf", 20);
-		f14 = createFont("./src/net/tlahmann/gdg/data/OpenSans-Regular.ttf", 14);
+		f08 = createFont("./src/net/tlahmann/gdg/data/OpenSans-Regular.ttf", 8);
 
+		length = 50.0f;
+		rotation = 0.0f;
+		offset = new Tuple<Float, Float>(74.0f, 84.0f);
 		numberOfArms = new Tuple<Integer, Integer>(6, 12);
 		thickness = new Tuple<Integer, Integer>(2, 12);
 		colors = new Tuple<Integer, Integer>(color(255, 255, 255, 255), color(0, 0, 0, 255));
@@ -47,31 +57,60 @@ public class Patterizer extends PApplet {
 		stars = new ArrayList<PStar>();
 		circles = new ArrayList<PCircle>();
 		boolean evodd = true;
-		for (int j = 2; j < height + 100; j += 74) {
+		for (int j = 2; j < height + 100; j += offset.x) {
 			int k = (evodd = !evodd) ? 42 : 0;
-			for (int i = 0; i < width + 100; i += 84) {
-				stars.add(new PStar(this, new float[] { i + k, j }, 50, numberOfArms.x));
-				// circles.add(new PCircle(this, new float[] { i + k, j }, 14 +
-				// j * (5.0f / 80.0f)));
+			for (int i = 0; i < width + 100; i += offset.y) {
+				stars.add(new PStar(this, new float[] { i + k, j }, length, rotation, numberOfArms.x));
+				circles.add(new PCircle(this, new float[] { i + k, j }, 14 + j * (5.0f / 80.0f)));
 			}
 		}
 	}
 
 	public void initGui() {
 		cp5 = new ControlP5(this);
+		ControlFont font = new ControlFont(f08);
+
+		int guiElementHeight = 15;
+		int xpos = 110;
+
+		// horizontal sliders for x offset
+		cp5.addSlider("arm length").setPosition(20, xpos).setRange(10, 500).setValue(length)
+				.setSize(200, guiElementHeight).setColorBackground(color(50, 50, 50, 255))
+				.setColorForeground(color(255, 255, 255, 255)).setColorActive(color(230, 230, 230, 255))
+				.setColorValueLabel(color(128, 128, 128, 255)).setFont(font).setId(0);
+
+		// horizontal sliders for x offset
+		cp5.addSlider("rotation").setPosition(20, xpos += 2 * guiElementHeight).setRange(0, PI).setValue(offset.x)
+				.setSize(200, guiElementHeight).setColorBackground(color(50, 50, 50, 255))
+				.setColorForeground(color(255, 255, 255, 255)).setColorActive(color(230, 230, 230, 255))
+				.setColorValueLabel(color(128, 128, 128, 255)).setFont(font).setId(1);
+
+		// horizontal sliders for x offset
+		cp5.addSlider("x offset").setPosition(20, xpos += 2 * guiElementHeight).setRange(1, width).setValue(offset.x)
+				.setSize(200, guiElementHeight).setColorBackground(color(50, 50, 50, 255))
+				.setColorForeground(color(255, 255, 255, 255)).setColorActive(color(230, 230, 230, 255))
+				.setColorValueLabel(color(128, 128, 128, 255)).setFont(font).setId(2);
+
+		// horizontal sliders for y offset
+		cp5.addSlider("y offset").setPosition(20, xpos += 2 * guiElementHeight).setRange(1, height).setValue(offset.y)
+				.setSize(200, guiElementHeight).setColorBackground(color(50, 50, 50, 255))
+				.setColorForeground(color(255, 255, 255, 255)).setColorActive(color(230, 230, 230, 255))
+				.setColorValueLabel(color(128, 128, 128, 255)).setFont(font).setId(3);
 
 		// horizontal sliders for number of arms
 		// don't forget to set the ID!
-		cp5.addSlider("Tickness").setPosition(20, 110).setRange(1, thickness.y).setValue(thickness.x).setSize(200, 15)
-				.setNumberOfTickMarks(thickness.y).setColorBackground(color(50, 50, 50, 255))
-				.setColorForeground(color(255, 255, 255, 255)).setColorActive(color(230, 230, 230, 255))
-				.setColorValueLabel(color(128, 128, 128, 255)).setId(0);
+		cp5.addSlider("Tickness").setPosition(20, xpos += 2 * guiElementHeight).setRange(1, thickness.y)
+				.setValue(thickness.x).setSize(200, guiElementHeight).setNumberOfTickMarks(thickness.y)
+				.setColorBackground(color(50, 50, 50, 255)).setColorForeground(color(255, 255, 255, 255))
+				.setColorActive(color(230, 230, 230, 255)).setColorValueLabel(color(128, 128, 128, 255)).setFont(font)
+				.setId(4);
 
 		// horizontal sliders for number of arms
-		cp5.addSlider("Number of Arms").setPosition(20, 150).setRange(1, numberOfArms.y).setValue(numberOfArms.x)
-				.setSize(200, 15).setNumberOfTickMarks(numberOfArms.y).setColorBackground(color(50, 50, 50, 255))
-				.setColorForeground(color(255, 255, 255, 255)).setColorActive(color(230, 230, 230, 255))
-				.setColorValueLabel(color(128, 128, 128, 255)).setId(1);
+		cp5.addSlider("Number of Arms").setPosition(20, xpos += 2 * guiElementHeight).setRange(1, numberOfArms.y)
+				.setValue(numberOfArms.x).setSize(200, guiElementHeight).setNumberOfTickMarks(numberOfArms.y)
+				.setColorBackground(color(50, 50, 50, 255)).setColorForeground(color(255, 255, 255, 255))
+				.setColorActive(color(230, 230, 230, 255)).setColorValueLabel(color(128, 128, 128, 255)).setFont(font)
+				.setId(5);
 
 		// create a toggle and change the default look to a (on/off) switch look
 		// cp5.addToggle("B/W <-> W/B").setPosition(20, 190).setSize(30,
@@ -81,14 +120,19 @@ public class Patterizer extends PApplet {
 		// .setColorActive(color(230, 230, 230,
 		// 255)).setColorValueLabel(color(128, 128, 128, 255)).setId(2);
 
-		cp5.addColorPicker("foreground").setPosition(20, 240).setWidth(100).setSize(100, 19).setColorValue(colors.x)
-				.setId(2);
+		colorPickerF = cp5.addColorPicker("foreground").setPosition(20, xpos += 2 * guiElementHeight).setWidth(200)
+				.setSize(100, guiElementHeight).setColorValue(colors.x).setFont(font);
+		cp5.addButton("set foreground").setValue(0).setPosition(175, xpos += 3 * guiElementHeight - 1)
+				.setSize(100, guiElementHeight).setFont(font).setId(6);
 
-		cp5.addColorPicker("background").setPosition(20, 300).setWidth(100).setSize(100, 19).setColorValue(colors.x)
-				.setId(3);
+		colorPickerB = cp5.addColorPicker("background").setPosition(20, xpos += 2 * guiElementHeight).setWidth(200)
+				.setSize(100, guiElementHeight).setColorValue(colors.y).setFont(font);
+		cp5.addButton("set background").setValue(0).setPosition(175, xpos += 3 * guiElementHeight - 1)
+				.setSize(100, guiElementHeight).setFont(font).setId(7);
 
-		cp5.addButton("reset").setValue(0).setPosition(20, 370).setSize(100, 19).setId(4);
-		cp5.addButton("save screenshot").setValue(0).setPosition(140, 370).setSize(100, 19).setId(5);
+		cp5.addButton("reset").setValue(0).setPosition(20, 470).setSize(100, guiElementHeight).setFont(font).setId(8);
+		cp5.addButton("save screenshot").setValue(0).setPosition(140, 470).setSize(100, guiElementHeight).setFont(font)
+				.setId(9);
 
 	}
 
@@ -101,9 +145,9 @@ public class Patterizer extends PApplet {
 
 		for (PStar s : stars)
 			s.display();
-		// for (PCircle c : circles)
-		// c.run();
-		if (mouseX > 0 && mouseX < 300 && mouseY > 0 && mouseY < 400) {
+		for (PCircle c : circles)
+			c.run();
+		if (mouseX > 0 && mouseX < 300 && mouseY > 0 && mouseY < 600) {
 			drawGui();
 			guiTimeout = 60;
 		} else {
@@ -121,7 +165,7 @@ public class Patterizer extends PApplet {
 		strokeWeight(3);
 		stroke(255);
 		fill(0);
-		rect(0, 0, 300, 400);
+		rect(0, 0, 300, 600);
 
 		// gui elements
 		strokeWeight(1);
@@ -142,20 +186,36 @@ public class Patterizer extends PApplet {
 	public void controlEvent(ControlEvent theEvent) {
 		switch (theEvent.getId()) {
 		case (0):
-			thickness.x = (int) theEvent.getController().getValue();
-			// init();
+			length = theEvent.getController().getValue();
+			init();
 			break;
 		case (1):
-			numberOfArms.x = (int) theEvent.getController().getValue();
+			rotation = theEvent.getController().getValue();
 			init();
 			break;
 		case (2):
-			colors.x = color(theEvent.getArrayValue(0), theEvent.getArrayValue(1), theEvent.getArrayValue(2),
-					theEvent.getArrayValue(3));
+			offset.x = theEvent.getController().getValue();
+			init();
 			break;
 		case (3):
-			colors.y = color(theEvent.getArrayValue(0), theEvent.getArrayValue(1), theEvent.getArrayValue(2),
-					theEvent.getArrayValue(3));
+			offset.y = theEvent.getController().getValue();
+			init();
+			break;
+		case (4):
+			thickness.x = (int) theEvent.getController().getValue();
+			init();
+			break;
+		case (5):
+			numberOfArms.x = (int) theEvent.getController().getValue();
+			init();
+			break;
+		case (6):
+			colors.x = color(colorPickerF.getArrayValue(0), colorPickerF.getArrayValue(1),
+					colorPickerF.getArrayValue(2), colorPickerF.getArrayValue(3));
+			break;
+		case (7):
+			colors.y = color(colorPickerB.getArrayValue(0), colorPickerB.getArrayValue(1),
+					colorPickerB.getArrayValue(2), colorPickerB.getArrayValue(3));
 			break;
 		}
 	}
