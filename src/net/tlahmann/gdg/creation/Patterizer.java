@@ -2,7 +2,6 @@ package net.tlahmann.gdg.creation;
 
 import java.util.List;
 
-import controlP5.ColorPicker;
 import controlP5.ControlEvent;
 import controlP5.ControlFont;
 import controlP5.ControlP5;
