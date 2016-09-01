@@ -21,8 +21,8 @@ public class Patterizer extends PApplet {
 	public PFont f14, f20;
 	public Tuple<Integer, Integer> numberOfArms;
 	public Tuple<Integer, Integer> thickness;
-	ControlP5 cp5;
 	public Tuple<Integer, Integer> colors;
+	ControlP5 cp5;
 	float guiTimeout = 0;
 
 	List<PStar> stars;
@@ -86,6 +86,9 @@ public class Patterizer extends PApplet {
 
 		cp5.addColorPicker("background").setPosition(20, 300).setWidth(100).setSize(100, 19).setColorValue(colors.x)
 				.setId(3);
+
+		cp5.addButton("reset").setValue(0).setPosition(20, 370).setSize(100, 19).setId(4);
+		cp5.addButton("save screenshot").setValue(0).setPosition(140, 370).setSize(100, 19).setId(5);
 
 	}
 
@@ -170,6 +173,10 @@ public class Patterizer extends PApplet {
 	}
 
 	public void keyPressed() {
+	}
+
+	void screenshot() {
+		saveFrame("line-######.png");
 	}
 
 	public static void main(String[] args) {
