@@ -4,7 +4,6 @@ import java.util.List;
 
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
-import controlP5.Slider;
 import net.tlahmann.gdg.creation.helper.Tuple;
 import net.tlahmann.gdg.creation.object.PCircle;
 import net.tlahmann.gdg.creation.object.PStar;
@@ -23,7 +22,7 @@ public class Patterizer extends PApplet {
 	public Tuple<Integer, Integer> numberOfArms;
 	public Tuple<Integer, Integer> thickness;
 	ControlP5 cp5;
-	Slider[] sliders;
+	public Tuple<Integer, Integer> colors;
 	float guiTimeout = 0;
 
 	List<PStar> stars;
@@ -36,6 +35,7 @@ public class Patterizer extends PApplet {
 
 		numberOfArms = new Tuple<Integer, Integer>(6, 12);
 		thickness = new Tuple<Integer, Integer>(2, 12);
+		colors = new Tuple<Integer, Integer>(color(255, 255, 255, 255), color(0, 0, 0, 255));
 
 		// noLoop();
 		frameRate(60);
@@ -59,20 +59,34 @@ public class Patterizer extends PApplet {
 
 	public void initGui() {
 		cp5 = new ControlP5(this);
-		sliders = new Slider[2];
 
 		// horizontal sliders for number of arms
 		// don't forget to set the ID!
-		sliders[0] = cp5.addSlider("thickness").setLabel("Tickness").setPosition(20, 110).setRange(1, thickness.y)
-				.setValue(thickness.x).setSize(200, 10).setNumberOfTickMarks(thickness.y)
-				.setColorBackground(color(50, 50, 50, 255)).setColorForeground(color(255, 255, 255, 255))
-				.setColorActive(color(230, 230, 230, 255)).setColorValueLabel(color(128, 128, 128, 255)).setId(0);
+		cp5.addSlider("Tickness").setPosition(20, 110).setRange(1, thickness.y).setValue(thickness.x).setSize(200, 15)
+				.setNumberOfTickMarks(thickness.y).setColorBackground(color(50, 50, 50, 255))
+				.setColorForeground(color(255, 255, 255, 255)).setColorActive(color(230, 230, 230, 255))
+				.setColorValueLabel(color(128, 128, 128, 255)).setId(0);
 
 		// horizontal sliders for number of arms
-		sliders[1] = cp5.addSlider("arms").setLabel("Number of Arms").setPosition(20, 150).setRange(1, numberOfArms.y)
-				.setValue(numberOfArms.x).setSize(200, 10).setNumberOfTickMarks(numberOfArms.y)
-				.setColorBackground(color(50, 50, 50, 255)).setColorForeground(color(255, 255, 255, 255))
-				.setColorActive(color(230, 230, 230, 255)).setColorValueLabel(color(128, 128, 128, 255)).setId(1);
+		cp5.addSlider("Number of Arms").setPosition(20, 150).setRange(1, numberOfArms.y).setValue(numberOfArms.x)
+				.setSize(200, 15).setNumberOfTickMarks(numberOfArms.y).setColorBackground(color(50, 50, 50, 255))
+				.setColorForeground(color(255, 255, 255, 255)).setColorActive(color(230, 230, 230, 255))
+				.setColorValueLabel(color(128, 128, 128, 255)).setId(1);
+
+		// create a toggle and change the default look to a (on/off) switch look
+		// cp5.addToggle("B/W <-> W/B").setPosition(20, 190).setSize(30,
+		// 15).setValue(true).setMode(ControlP5.SWITCH)
+		// .setColorBackground(color(50, 50, 50,
+		// 255)).setColorForeground(color(255, 255, 255, 255))
+		// .setColorActive(color(230, 230, 230,
+		// 255)).setColorValueLabel(color(128, 128, 128, 255)).setId(2);
+
+		cp5.addColorPicker("foreground").setPosition(20, 240).setWidth(100).setSize(100, 19).setColorValue(colors.x)
+				.setId(2);
+
+		cp5.addColorPicker("background").setPosition(20, 300).setWidth(100).setSize(100, 19).setColorValue(colors.x)
+				.setId(3);
+
 	}
 
 	public void settings() {
@@ -80,7 +94,7 @@ public class Patterizer extends PApplet {
 	}
 
 	public void draw() {
-		background(0);
+		background(colors.y);
 
 		for (PStar s : stars)
 			s.display();
@@ -131,6 +145,14 @@ public class Patterizer extends PApplet {
 		case (1):
 			numberOfArms.x = (int) theEvent.getController().getValue();
 			init();
+			break;
+		case (2):
+			colors.x = color(theEvent.getArrayValue(0), theEvent.getArrayValue(1), theEvent.getArrayValue(2),
+					theEvent.getArrayValue(3));
+			break;
+		case (3):
+			colors.y = color(theEvent.getArrayValue(0), theEvent.getArrayValue(1), theEvent.getArrayValue(2),
+					theEvent.getArrayValue(3));
 			break;
 		}
 	}

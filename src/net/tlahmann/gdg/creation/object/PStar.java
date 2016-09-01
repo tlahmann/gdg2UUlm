@@ -22,7 +22,7 @@ public class PStar {
 	}
 
 	public void display() {
-		parent.stroke(255);
+		parent.stroke(parent.colors.x);
 		parent.strokeCap(PApplet.SQUARE);
 		parent.strokeWeight(parent.thickness.x);
 		for (int i = 0; i < points.length; i++) {
