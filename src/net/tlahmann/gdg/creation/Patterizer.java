@@ -29,9 +29,6 @@ public class Patterizer extends PApplet {
 	ControlP5 cp5;
 	float guiTimeout = 0;
 
-	ColorPicker colorPickerF;
-	ColorPicker colorPickerB;
-
 	List<PStar> stars;
 	List<PCircle> circles;
 
@@ -112,24 +109,6 @@ public class Patterizer extends PApplet {
 				.setColorActive(color(230, 230, 230, 255)).setColorValueLabel(color(128, 128, 128, 255)).setFont(font)
 				.setId(5);
 
-		// create a toggle and change the default look to a (on/off) switch look
-		// cp5.addToggle("B/W <-> W/B").setPosition(20, 190).setSize(30,
-		// 15).setValue(true).setMode(ControlP5.SWITCH)
-		// .setColorBackground(color(50, 50, 50,
-		// 255)).setColorForeground(color(255, 255, 255, 255))
-		// .setColorActive(color(230, 230, 230,
-		// 255)).setColorValueLabel(color(128, 128, 128, 255)).setId(2);
-
-		colorPickerF = cp5.addColorPicker("foreground").setPosition(20, xpos += 2 * guiElementHeight).setWidth(200)
-				.setSize(100, guiElementHeight).setColorValue(colors.x).setFont(font);
-		cp5.addButton("set foreground").setValue(0).setPosition(175, xpos += 3 * guiElementHeight - 1)
-				.setSize(100, guiElementHeight).setFont(font).setId(6);
-
-		colorPickerB = cp5.addColorPicker("background").setPosition(20, xpos += 2 * guiElementHeight).setWidth(200)
-				.setSize(100, guiElementHeight).setColorValue(colors.y).setFont(font);
-		cp5.addButton("set background").setValue(0).setPosition(175, xpos += 3 * guiElementHeight - 1)
-				.setSize(100, guiElementHeight).setFont(font).setId(7);
-
 		cp5.addButton("reset").setValue(0).setPosition(20, 470).setSize(100, guiElementHeight).setFont(font).setId(8);
 		cp5.addButton("save screenshot").setValue(0).setPosition(140, 470).setSize(100, guiElementHeight).setFont(font)
 				.setId(9);
@@ -208,14 +187,6 @@ public class Patterizer extends PApplet {
 		case (5):
 			numberOfArms.x = (int) theEvent.getController().getValue();
 			init();
-			break;
-		case (6):
-			colors.x = color(colorPickerF.getArrayValue(0), colorPickerF.getArrayValue(1),
-					colorPickerF.getArrayValue(2), colorPickerF.getArrayValue(3));
-			break;
-		case (7):
-			colors.y = color(colorPickerB.getArrayValue(0), colorPickerB.getArrayValue(1),
-					colorPickerB.getArrayValue(2), colorPickerB.getArrayValue(3));
 			break;
 		}
 	}
