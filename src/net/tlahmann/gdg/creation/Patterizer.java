@@ -2,7 +2,9 @@ package net.tlahmann.gdg.creation;
 
 import java.util.List;
 
-import net.tlahmann.gdg.creation.gui.HScrollbar;
+import controlP5.ControlEvent;
+import controlP5.ControlP5;
+import controlP5.Slider;
 import net.tlahmann.gdg.creation.helper.Tuple;
 import net.tlahmann.gdg.creation.object.PCircle;
 import net.tlahmann.gdg.creation.object.PStar;
@@ -20,18 +22,20 @@ public class Patterizer extends PApplet {
 	public PFont f14, f20;
 	public Tuple<Integer, Integer> numberOfArms;
 	public Tuple<Integer, Integer> thickness;
+	ControlP5 cp5;
+	Slider[] sliders;
 	float guiTimeout = 0;
 
 	List<PStar> stars;
 	List<PCircle> circles;
 
 	public void setup() {
-		// Create the font
+		// Create font
 		f20 = createFont("./src/net/tlahmann/gdg/data/OpenSans-Regular.ttf", 20);
 		f14 = createFont("./src/net/tlahmann/gdg/data/OpenSans-Regular.ttf", 14);
 
-		numberOfArms = new Tuple<Integer, Integer>(0, 12);
-		thickness = new Tuple<Integer, Integer>(0, 12);
+		numberOfArms = new Tuple<Integer, Integer>(6, 12);
+		thickness = new Tuple<Integer, Integer>(2, 12);
 
 		// noLoop();
 		frameRate(60);
@@ -39,14 +43,7 @@ public class Patterizer extends PApplet {
 		init();
 	}
 
-	HScrollbar hs1, hs2;
-
 	private void init() {
-		thickness.x = round(map(hs1.getPos(), 0, hs1.sposMax, 0, thickness.y - 1));
-		hs1.text = thickness.x.toString();
-		numberOfArms.x = round(map(hs2.getPos(), 0, hs2.sposMax, 0, numberOfArms.y - 1));
-		hs2.text = numberOfArms.x.toString();
-
 		stars = new ArrayList<PStar>();
 		circles = new ArrayList<PCircle>();
 		boolean evodd = true;
@@ -61,8 +58,21 @@ public class Patterizer extends PApplet {
 	}
 
 	public void initGui() {
-		hs1 = new HScrollbar(this, 20, 60, 200, 12, 1);
-		hs2 = new HScrollbar(this, 20, 110, 200, 12, 1);
+		cp5 = new ControlP5(this);
+		sliders = new Slider[2];
+
+		// horizontal sliders for number of arms
+		// don't forget to set the ID!
+		sliders[0] = cp5.addSlider("thickness").setLabel("Tickness").setPosition(20, 110).setRange(1, thickness.y)
+				.setValue(thickness.x).setSize(200, 10).setNumberOfTickMarks(thickness.y)
+				.setColorBackground(color(50, 50, 50, 255)).setColorForeground(color(255, 255, 255, 255))
+				.setColorActive(color(230, 230, 230, 255)).setColorValueLabel(color(128, 128, 128, 255)).setId(0);
+
+		// horizontal sliders for number of arms
+		sliders[1] = cp5.addSlider("arms").setLabel("Number of Arms").setPosition(20, 150).setRange(1, numberOfArms.y)
+				.setValue(numberOfArms.x).setSize(200, 10).setNumberOfTickMarks(numberOfArms.y)
+				.setColorBackground(color(50, 50, 50, 255)).setColorForeground(color(255, 255, 255, 255))
+				.setColorActive(color(230, 230, 230, 255)).setColorValueLabel(color(128, 128, 128, 255)).setId(1);
 	}
 
 	public void settings() {
@@ -71,7 +81,7 @@ public class Patterizer extends PApplet {
 
 	public void draw() {
 		background(0);
-		stroke(0);
+
 		for (PStar s : stars)
 			s.display();
 		// for (PCircle c : circles)
@@ -83,12 +93,14 @@ public class Patterizer extends PApplet {
 			if (guiTimeout > 0) {
 				drawGui();
 				guiTimeout--;
+			} else {
+				cp5.hide();
 			}
 		}
 	}
 
 	void drawGui() {
-		// gui containers
+		// gui container
 		strokeWeight(3);
 		stroke(255);
 		fill(0);
@@ -97,23 +109,29 @@ public class Patterizer extends PApplet {
 		// gui elements
 		strokeWeight(1);
 		fill(255);
-		
 		textAlign(LEFT);
 
 		textFont(f20);
-		text("Thickness", 20, 44);
-		hs1.update();
-		hs1.display();
-		if (thickness.x != round(map(hs1.getPos(), 0, hs1.sposMax, 0, thickness.y - 1))) {
-			init();
-		}
-
+		text("Objects", 20, 44);
 		textFont(f20);
-		text("Arms", 20, 94);
-		hs2.update();
-		hs2.display();
-		if (numberOfArms.x != round(map(hs2.getPos(), 0, hs2.sposMax, 0, numberOfArms.y - 1))) {
+		text("Appearance", 20, 94);
+
+		// draw control p5 items
+		cp5.show();
+	}
+
+	// function controlEvent will be invoked with every value change
+	// in any registered controller
+	public void controlEvent(ControlEvent theEvent) {
+		switch (theEvent.getId()) {
+		case (0):
+			thickness.x = (int) theEvent.getController().getValue();
+			// init();
+			break;
+		case (1):
+			numberOfArms.x = (int) theEvent.getController().getValue();
 			init();
+			break;
 		}
 	}
 
