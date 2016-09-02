@@ -9,11 +9,11 @@ public class PStar {
 	private PVector[] points;
 	private PVector center;
 
-	public PStar(Patterizer p, float[] pos, float radius, float rotation, int ends) {
+	public PStar(Patterizer p, float[] pos, float radius, float rotation, float ends) {
 		parent = p;
 
 		center = new PVector(pos[0], pos[1], 0);
-		points = new PVector[ends];
+		points = new PVector[(int) ends];
 		for (int i = 0; i < ends; i++) {
 			float d = PApplet.map(i, 0, ends, 0, PApplet.TWO_PI) - PApplet.HALF_PI;
 			points[i] = new PVector(center.x + PApplet.cos(d + rotation) * radius, center.y + PApplet.sin(d+ rotation) * radius);
