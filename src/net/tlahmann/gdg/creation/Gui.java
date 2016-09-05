@@ -39,37 +39,37 @@ public class Gui extends PApplet {
 		cp5 = new ControlP5(this);
 
 		int guiElementHeight = 15;
-		
+
 		Button b;
-		
+
 		b = cp5.addButton("Star");
 		b.setValue(0);
 		b.setPosition(20, 60);
 		b.setSize(120, 40);
 		styleControl(b);
-		b.setId(6);
-		
+		b.setId(21);
+
 		b = cp5.addButton("Circle");
 		b.setValue(0);
 		b.setPosition(160, 60);
 		b.setSize(120, 40);
 		styleControl(b);
-		b.setId(6);
-		
+		b.setId(22);
+
 		b = cp5.addButton("Rectangle");
 		b.setValue(0);
 		b.setPosition(20, 110);
 		b.setSize(120, 40);
 		styleControl(b);
-		b.setId(6);
-		
+		b.setId(23);
+
 		b = cp5.addButton("Triangle");
 		b.setValue(0);
 		b.setPosition(160, 110);
 		b.setSize(120, 40);
 		styleControl(b);
-		b.setId(6);
-		
+		b.setId(24);
+
 		int xpos = 210;
 
 		String[] names = new String[] { "radius", "rotation", "x distance", "y distance", "tickness", "elements" };
@@ -88,7 +88,6 @@ public class Gui extends PApplet {
 			s.setId(i);
 		}
 
-		
 		b = cp5.addButton("offsetted");
 		b.setValue(0);
 		b.setPosition(20, xpos + 6 * 2 * guiElementHeight);
@@ -101,14 +100,14 @@ public class Gui extends PApplet {
 		b.setPosition(20, 580 - guiElementHeight);
 		b.setSize(120, guiElementHeight);
 		styleControl(b);
-		b.setId(8);
+		b.setId(61);
 
 		b = cp5.addButton("save screenshot");
 		b.setValue(0);
 		b.setPosition(160, 580 - guiElementHeight);
 		b.setSize(120, guiElementHeight);
 		styleControl(b);
-		b.setId(9);
+		b.setId(62);
 	}
 
 	void styleControl(Controller<?> c) {
@@ -165,6 +164,8 @@ public class Gui extends PApplet {
 			break;
 		case (5):
 			elements.y = theEvent.getController().getValue();
+			break;
+		case (6):
 			break;
 		}
 		changes = true;
