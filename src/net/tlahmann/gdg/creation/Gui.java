@@ -6,20 +6,19 @@ import controlP5.ControlFont;
 import controlP5.ControlP5;
 import controlP5.Controller;
 import controlP5.Slider;
-import net.tlahmann.gdg.creation.helper.Tuple3;
 import processing.core.PApplet;
 import processing.core.PFont;
+import processing.core.PVector;
 
 public class Gui extends PApplet {
 
-	public Tuple3<Float, Float, Float> radius = new Tuple3<Float, Float, Float>(5.f, 50.f, 1000.f);
-	public Tuple3<Float, Float, Float> rotation = new Tuple3<Float, Float, Float>(0.f, 0.f, 360.f);
-	public Tuple3<Float, Float, Float> distanceX = new Tuple3<Float, Float, Float>(10.f, 74.f, 1000.f);
-	public Tuple3<Float, Float, Float> distanceY = new Tuple3<Float, Float, Float>(10.f, 84.f, 1000.f);
-	// public Tuple2<Float, Float> offset = new Tu
+	public PVector radius = new PVector(5.f, 50.f, 1000.f);
+	public PVector rotation = new PVector(0.f, 0.f, 360.f);
+	public PVector distanceX = new PVector(10.f, 74.f, 1000.f);
+	public PVector distanceY = new PVector(10.f, 84.f, 1000.f);
 
-	public Tuple3<Float, Float, Float> thickness = new Tuple3<Float, Float, Float>(1.f, 2.f, 12.f);
-	public Tuple3<Float, Float, Float> elements = new Tuple3<Float, Float, Float>(1.f, 6.f, 12.f);
+	public PVector thickness = new PVector(1.f, 2.f, 12.f);
+	public PVector elements = new PVector(1.f, 6.f, 12.f);
 
 	public int[] colors = new int[] { color(255, 255, 255, 255), color(230, 230, 230, 255), color(128, 128, 128, 255),
 			color(50, 50, 50, 255), color(0, 0, 0, 255) };
@@ -73,9 +72,8 @@ public class Gui extends PApplet {
 		
 		int xpos = 210;
 
-		String[] names = new String[] { "radius", "rotation", "x offset", "y offset", "tickness", "elements" };
-		@SuppressWarnings("rawtypes")
-		Tuple3[] properties = new Tuple3[] { radius, rotation, distanceX, distanceY, thickness, elements };
+		String[] names = new String[] { "radius", "rotation", "x distance", "y distance", "tickness", "elements" };
+		PVector[] properties = new PVector[] { radius, rotation, distanceX, distanceY, thickness, elements };
 
 		Slider s;
 		for (int i = 0; i < 6; i++) {
