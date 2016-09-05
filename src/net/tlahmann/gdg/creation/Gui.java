@@ -1,4 +1,4 @@
-package net.tlahmann.gdg.creation.gui;
+package net.tlahmann.gdg.creation;
 
 import controlP5.Button;
 import controlP5.ControlElement;

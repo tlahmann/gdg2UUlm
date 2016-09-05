@@ -5,7 +5,6 @@ import java.util.List;
 import controlP5.ControlEvent;
 import controlP5.ControlFont;
 import controlP5.ControlP5;
-import net.tlahmann.gdg.creation.gui.Gui;
 import net.tlahmann.gdg.creation.helper.Tuple;
 import net.tlahmann.gdg.creation.object.PCircle;
 import net.tlahmann.gdg.creation.object.PStar;
