@@ -6,22 +6,28 @@ import controlP5.ControlFont;
 import controlP5.ControlP5;
 import controlP5.Controller;
 import controlP5.Slider;
-import net.tlahmann.gdg.creation.helper.Tuple2;
+import net.tlahmann.gdg.creation.helper.Tuple3;
 import processing.core.PApplet;
 import processing.core.PFont;
 
 public class Gui extends PApplet {
 
-	public float length = 50.0f;
-	public float rotation = 0.0f;
-	public Tuple2<Float, Float> offset = new Tuple2<Float, Float>(74.f, 84.f);
-	public Tuple2<Float, Float> numberOfArms = new Tuple2<Float, Float>(6.f, 12.f);
-	public Tuple2<Float, Float> thickness = new Tuple2<Float, Float>(2.f, 12.f);
-	public Tuple2<Integer, Integer> colors = new Tuple2<Integer, Integer>(color(255, 255, 255, 255),
-			color(0, 0, 0, 255));
+	public Tuple3<Float, Float, Float> radius = new Tuple3<Float, Float, Float>(5.f, 50.f, 1000.f);
+	public Tuple3<Float, Float, Float> rotation = new Tuple3<Float, Float, Float>(0.f, 0.f, 360.f);
+	public Tuple3<Float, Float, Float> distanceX = new Tuple3<Float, Float, Float>(10.f, 74.f, 1000.f);
+	public Tuple3<Float, Float, Float> distanceY = new Tuple3<Float, Float, Float>(10.f, 84.f, 1000.f);
+	// public Tuple2<Float, Float> offset = new Tu
+
+	public Tuple3<Float, Float, Float> thickness = new Tuple3<Float, Float, Float>(1.f, 2.f, 12.f);
+	public Tuple3<Float, Float, Float> elements = new Tuple3<Float, Float, Float>(1.f, 6.f, 12.f);
+
+	public int[] colors = new int[] { color(255, 255, 255, 255), color(230, 230, 230, 255), color(128, 128, 128, 255),
+			color(50, 50, 50, 255), color(0, 0, 0, 255) };
+
+	public boolean changes = false;
 
 	private PFont f20;
-	ControlFont font;
+	ControlFont f08;
 	private ControlP5 cp5;
 
 	public void setup() {
@@ -29,58 +35,90 @@ public class Gui extends PApplet {
 
 		// Create fonts
 		f20 = createFont("./src/net/tlahmann/gdg/data/OpenSans-Regular.ttf", 20);
-		PFont f08 = createFont("./src/net/tlahmann/gdg/data/OpenSans-Regular.ttf", 8);
-		font = new ControlFont(f08);
+		f08 = new ControlFont(createFont("./src/net/tlahmann/gdg/data/OpenSans-Regular.ttf", 10));
 
 		cp5 = new ControlP5(this);
 
 		int guiElementHeight = 15;
-		int xpos = 110;
+		
+		Button b;
+		
+		b = cp5.addButton("Star");
+		b.setValue(0);
+		b.setPosition(20, 60);
+		b.setSize(120, 40);
+		styleControl(b);
+		b.setId(6);
+		
+		b = cp5.addButton("Circle");
+		b.setValue(0);
+		b.setPosition(160, 60);
+		b.setSize(120, 40);
+		styleControl(b);
+		b.setId(6);
+		
+		b = cp5.addButton("Rectangle");
+		b.setValue(0);
+		b.setPosition(20, 110);
+		b.setSize(120, 40);
+		styleControl(b);
+		b.setId(6);
+		
+		b = cp5.addButton("Triangle");
+		b.setValue(0);
+		b.setPosition(160, 110);
+		b.setSize(120, 40);
+		styleControl(b);
+		b.setId(6);
+		
+		int xpos = 210;
 
-		Slider s;// pseudo useful object to hold sliders temporarily
-		String[] names = new String[] { "arm length", "rotation", "x offset", "y offset", "tickness", "arms" };
-		Tuple2[] ranges = new Tuple2[] { new Tuple2<Float, Float>(10.f, 500.f), new Tuple2<Float, Float>(0.f, PI),
-				new Tuple2<Float, Float>(1.f, 1000.f), new Tuple2<Float, Float>(1.f, 1000.f),
-				new Tuple2<Float, Float>(1.f, thickness.y), new Tuple2<Float, Float>(1.f, numberOfArms.y) };
-		float[] values = new float[] { length, rotation, offset.x, offset.y, thickness.x, numberOfArms.x };
+		String[] names = new String[] { "radius", "rotation", "x offset", "y offset", "tickness", "elements" };
+		@SuppressWarnings("rawtypes")
+		Tuple3[] properties = new Tuple3[] { radius, rotation, distanceX, distanceY, thickness, elements };
 
+		Slider s;
 		for (int i = 0; i < 6; i++) {
 			s = cp5.addSlider(names[i]);
 			s.setPosition(20, xpos + i * 2 * guiElementHeight);
-			s.setRange((float) ranges[i].x, (float) ranges[i].y);
-			s.setValue(values[i]);
+			s.setRange((float) properties[i].x, (float) properties[i].z);
+			s.setValue((float) properties[i].y);
 			s.setSize(200, guiElementHeight);
 			styleControl(s);
+			s.setNumberOfTickMarks((int) Math.ceil((float) properties[i].z - (float) properties[i].x + 1));
+			s.showTickMarks(false);
 			s.setId(i);
-			if (i == 4) {
-				s.setNumberOfTickMarks((int) Math.ceil(thickness.y));
-			} else if (i == 5) {
-				s.setNumberOfTickMarks((int) Math.ceil(numberOfArms.y));
-			}
 		}
 
-		Button b;
+		
+		b = cp5.addButton("offsetted");
+		b.setValue(0);
+		b.setPosition(20, xpos + 6 * 2 * guiElementHeight);
+		b.setSize(120, guiElementHeight);
+		styleControl(b);
+		b.setId(6);
+
 		b = cp5.addButton("reset");
 		b.setValue(0);
-		b.setPosition(20, 470);
-		b.setSize(100, guiElementHeight);
+		b.setPosition(20, 580 - guiElementHeight);
+		b.setSize(120, guiElementHeight);
 		styleControl(b);
 		b.setId(8);
 
 		b = cp5.addButton("save screenshot");
 		b.setValue(0);
-		b.setPosition(140, 470);
-		b.setSize(100, guiElementHeight);
+		b.setPosition(160, 580 - guiElementHeight);
+		b.setSize(120, guiElementHeight);
 		styleControl(b);
 		b.setId(9);
 	}
 
 	void styleControl(Controller<?> c) {
-		c.setColorBackground(color(50, 50, 50, 255)); // light grey
-		c.setColorForeground(color(255, 255, 255, 255)); // white
-		c.setColorActive(color(230, 230, 230, 255)); // gark grey
-		c.setColorValueLabel(color(128, 128, 128, 255)); // grey
-		c.setFont(font);
+		c.setColorBackground(colors[3]); // dark grey
+		c.setColorForeground(colors[0]); // white
+		c.setColorActive(colors[1]); // light grey
+		c.setColorValueLabel(colors[2]); // grey
+		c.setFont(f08);
 	}
 
 	public void settings() {
@@ -102,7 +140,7 @@ public class Gui extends PApplet {
 		textFont(f20);
 		text("Objects", 20, 44);
 		textFont(f20);
-		text("Appearance", 20, 94);
+		text("Appearance", 20, 194);
 
 		// draw control p5 items
 		cp5.show();
@@ -113,29 +151,24 @@ public class Gui extends PApplet {
 	public void controlEvent(ControlEvent theEvent) {
 		switch (theEvent.getId()) {
 		case (0):
-			length = theEvent.getController().getValue();
-			// init();
+			radius.y = theEvent.getController().getValue();
 			break;
 		case (1):
-			rotation = theEvent.getController().getValue();
-			// init();
+			rotation.y = radians(theEvent.getController().getValue());
 			break;
 		case (2):
-			offset.x = theEvent.getController().getValue();
-			// init();
+			distanceX.y = theEvent.getController().getValue();
 			break;
 		case (3):
-			offset.y = theEvent.getController().getValue();
-			// init();
+			distanceY.y = theEvent.getController().getValue();
 			break;
 		case (4):
-			thickness.x = theEvent.getController().getValue();
-			// init();
+			thickness.y = theEvent.getController().getValue();
 			break;
 		case (5):
-			numberOfArms.x = theEvent.getController().getValue();
-			// init();
+			elements.y = theEvent.getController().getValue();
 			break;
 		}
+		changes = true;
 	}
 }

@@ -21,7 +21,7 @@ public class Patterizer extends PApplet {
 
 	public void setup() {
 		gui = new Gui();
-		PApplet.runSketch(new String[] {"Graphical User Interface"}, gui);
+		PApplet.runSketch(new String[] { "Graphical User Interface" }, gui);
 
 		frameRate(60);
 		init();
@@ -31,13 +31,14 @@ public class Patterizer extends PApplet {
 		stars = new ArrayList<PStar>();
 		circles = new ArrayList<PCircle>();
 		boolean evodd = true;
-		for (int j = 2; j < height + 100; j += gui.offset.x) {
-			int k = (evodd = !evodd) ? 42 : 0;
-			for (int i = 0; i < width + 100; i += gui.offset.y) {
-				stars.add(new PStar(this, new float[] { i + k, j }, gui.length, gui.rotation, gui.numberOfArms.x));
-				circles.add(new PCircle(this, new float[] { i + k, j }, 14 + j * (5.0f / 80.0f)));
+		for (int j = 2; j < height + 100; j += gui.distanceX.y) {
+			int k = (int) ((evodd = !evodd) ? gui.distanceY.y/2 : 0);
+			for (int i = 0; i < width + 100; i += gui.distanceY.y) {
+				stars.add(new PStar(this, new float[] { i + k, j }, gui.radius.y, gui.rotation.y, gui.elements.y));
+//				circles.add(new PCircle(this, new float[] { i + k, j }, 14 + j * (5.0f / 80.0f)));
 			}
 		}
+		gui.changes = false;
 	}
 
 	public void settings() {
@@ -45,42 +46,16 @@ public class Patterizer extends PApplet {
 	}
 
 	public void draw() {
-		background(gui.colors.y);
+		if (gui.changes) {
+			init();
+		}
+
+		background(gui.colors[4]);
 
 		for (PStar s : stars)
 			s.display();
 		for (PCircle c : circles)
 			c.run();
-		// if (mouseX > 0 && mouseX < 300 && mouseY > 0 && mouseY < 600) {
-		// drawGui();
-		// gui.guiTimeout = 60;
-		// } else {
-		// if (gui.guiTimeout > 0) {
-		// drawGui();
-		// gui.guiTimeout--;
-		// } else {
-		// cp5.hide();
-		// }
-		// }
-	}
-
-	void drawGui() {
-
-	}
-
-	public void mouseDragged() {
-
-	}
-
-	public void mousePressed() {
-		// loop();
-	}
-
-	public void mouseReleased() {
-		// noLoop();
-	}
-
-	public void keyPressed() {
 	}
 
 	void screenshot() {

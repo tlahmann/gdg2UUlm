@@ -22,9 +22,9 @@ public class PStar {
 	}
 
 	public void display() {
-		parent.stroke(parent.gui.colors.x);
+		parent.stroke(parent.gui.colors[0]);
 		parent.strokeCap(PApplet.SQUARE);
-		parent.strokeWeight(parent.gui.thickness.x);
+		parent.strokeWeight(parent.gui.thickness.y);
 		for (int i = 0; i < points.length; i++) {
 			parent.line(center.x, center.y, points[i].x, points[i].y);
 		}
