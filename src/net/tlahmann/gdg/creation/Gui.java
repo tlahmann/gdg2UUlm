@@ -1,13 +1,12 @@
 package net.tlahmann.gdg.creation;
 
 import controlP5.Button;
-import controlP5.ControlElement;
 import controlP5.ControlEvent;
 import controlP5.ControlFont;
 import controlP5.ControlP5;
 import controlP5.Controller;
 import controlP5.Slider;
-import net.tlahmann.gdg.creation.helper.Tuple;
+import net.tlahmann.gdg.creation.helper.Tuple2;
 import processing.core.PApplet;
 import processing.core.PFont;
 
@@ -15,10 +14,11 @@ public class Gui extends PApplet {
 
 	public float length = 50.0f;
 	public float rotation = 0.0f;
-	public Tuple<Float, Float> offset = new Tuple<Float, Float>(74.f, 84.f);
-	public Tuple<Float, Float> numberOfArms = new Tuple<Float, Float>(6.f, 12.f);
-	public Tuple<Float, Float> thickness = new Tuple<Float, Float>(2.f, 12.f);
-	public Tuple<Integer, Integer> colors = new Tuple<Integer, Integer>(color(255, 255, 255, 255), color(0, 0, 0, 255));
+	public Tuple2<Float, Float> offset = new Tuple2<Float, Float>(74.f, 84.f);
+	public Tuple2<Float, Float> numberOfArms = new Tuple2<Float, Float>(6.f, 12.f);
+	public Tuple2<Float, Float> thickness = new Tuple2<Float, Float>(2.f, 12.f);
+	public Tuple2<Integer, Integer> colors = new Tuple2<Integer, Integer>(color(255, 255, 255, 255),
+			color(0, 0, 0, 255));
 
 	private PFont f20;
 	ControlFont font;
@@ -39,9 +39,9 @@ public class Gui extends PApplet {
 
 		Slider s;// pseudo useful object to hold sliders temporarily
 		String[] names = new String[] { "arm length", "rotation", "x offset", "y offset", "tickness", "arms" };
-		Tuple[] ranges = new Tuple[] { new Tuple<Float, Float>(10.f, 500.f), new Tuple<Float, Float>(0.f, PI),
-				new Tuple<Float, Float>(1.f, 1000.f), new Tuple<Float, Float>(1.f, 1000.f),
-				new Tuple<Float, Float>(1.f, thickness.y), new Tuple<Float, Float>(1.f, numberOfArms.y) };
+		Tuple2[] ranges = new Tuple2[] { new Tuple2<Float, Float>(10.f, 500.f), new Tuple2<Float, Float>(0.f, PI),
+				new Tuple2<Float, Float>(1.f, 1000.f), new Tuple2<Float, Float>(1.f, 1000.f),
+				new Tuple2<Float, Float>(1.f, thickness.y), new Tuple2<Float, Float>(1.f, numberOfArms.y) };
 		float[] values = new float[] { length, rotation, offset.x, offset.y, thickness.x, numberOfArms.x };
 
 		for (int i = 0; i < 6; i++) {
