@@ -6,6 +6,7 @@ import net.tlahmann.gdg.creation.object.PCircle;
 import net.tlahmann.gdg.creation.object.PStar;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import processing.core.PApplet;
 
@@ -50,6 +51,9 @@ public class Patterizer extends PApplet {
 		if (gui.changes) {
 			init();
 		}
+		if (gui.screenshot) {
+			screenshot();
+		}
 
 		background(gui.colors[4]);
 
@@ -60,7 +64,13 @@ public class Patterizer extends PApplet {
 	}
 
 	void screenshot() {
-		saveFrame("line-######.png");
+		saveFrame("Patterizer-" + timestamp() + ".png");
+		gui.screenshot = false;
+	}
+
+	String timestamp() {
+		Calendar now = Calendar.getInstance();
+		return String.format("%1$ty%1$tm%1$td_%1$tH%1$tM%1$tS", now);
 	}
 
 	public static void main(String[] args) {

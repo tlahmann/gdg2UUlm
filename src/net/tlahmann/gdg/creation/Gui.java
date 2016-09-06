@@ -189,6 +189,10 @@ public class Gui extends PApplet {
 		case (22):
 			outline = false;
 			break;
+
+		case (62):
+			screenshot = true;
+			break;
 		}
 		changes = true;
 	}
