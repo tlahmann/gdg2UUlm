@@ -13,21 +13,24 @@ import processing.core.PVector;
 
 public class Gui extends PApplet {
 
-	public PVector radius = new PVector(5.f, 50.f, 1000.f);
-	public PVector rotation = new PVector(0.f, 0.f, 360.f);
+	public PVector radius = new PVector(5, 50, 1000);
+	public PVector rotation = new PVector(0, 0, 360);
 	public PVector originX = new PVector(0, 0, 1024);
 	public PVector originY = new PVector(0, 0, 720);
 	public PVector distanceX = new PVector(10, 74, 1024);
 	public PVector distanceY = new PVector(10, 84, 720);
 	public float offset = distanceX.y / 2;
 
-	public PVector thickness = new PVector(1.f, 2.f, 12.f);
-	public PVector elements = new PVector(1.f, 6.f, 12.f);
+	public PVector thickness = new PVector(1, 2, 50);
+	public PVector elements = new PVector(1, 6, 50);
+
+	public boolean outline = false;
 
 	public int[] colors = new int[] { color(255, 255, 255, 255), color(230, 230, 230, 255), color(128, 128, 128, 255),
 			color(50, 50, 50, 255), color(0, 0, 0, 255) };
 
 	public boolean changes = false;
+	public boolean screenshot = false;
 
 	private PFont f20;
 	ControlFont f08;
@@ -46,37 +49,23 @@ public class Gui extends PApplet {
 
 		Button b;
 
-		b = cp5.addButton("Star");
+		b = cp5.addButton("Outline");
 		b.setValue(0);
 		b.setPosition(20, 60);
 		b.setSize(120, 40);
 		styleControl(b);
 		b.setId(21);
 
-		b = cp5.addButton("Circle");
+		b = cp5.addButton("Inline");
 		b.setValue(0);
 		b.setPosition(160, 60);
 		b.setSize(120, 40);
 		styleControl(b);
 		b.setId(22);
 
-		b = cp5.addButton("Rectangle");
-		b.setValue(0);
-		b.setPosition(20, 110);
-		b.setSize(120, 40);
-		styleControl(b);
-		b.setId(23);
-
-		b = cp5.addButton("Triangle");
-		b.setValue(0);
-		b.setPosition(160, 110);
-		b.setSize(120, 40);
-		styleControl(b);
-		b.setId(24);
-
 		Slider2D s2d;
 		s2d = cp5.addSlider2D("origin");
-		s2d.setPosition(20, 210);
+		s2d.setPosition(20, 160);
 		s2d.setSize(200, 113);
 		s2d.setMinX(originX.x);
 		s2d.setMaxX(originX.z);
@@ -86,7 +75,7 @@ public class Gui extends PApplet {
 		s2d.setId(10);
 		styleControl(s2d);
 
-		int xpos = 353;
+		int xpos = 303;
 
 		String[] names = new String[] { "radius", "rotation", "x distance", "y distance", "tickness", "elements" };
 		PVector[] properties = new PVector[] { radius, rotation, distanceX, distanceY, thickness, elements };
@@ -153,7 +142,7 @@ public class Gui extends PApplet {
 		textFont(f20);
 		text("Objects", 20, 44);
 		textFont(f20);
-		text("Appearance", 20, 194);
+		text("Appearance", 20, 144);
 
 		// draw control p5 items
 		cp5.show();
@@ -193,6 +182,12 @@ public class Gui extends PApplet {
 		case (10):
 			originX.y = theEvent.getController().getArrayValue()[0];
 			originY.y = theEvent.getController().getArrayValue()[1];
+			break;
+		case (21):
+			outline = true;
+			break;
+		case (22):
+			outline = false;
 			break;
 		}
 		changes = true;
