@@ -32,7 +32,7 @@ public class Patterizer extends PApplet {
 		circles = new ArrayList<PCircle>();
 		boolean evodd = true;
 		for (int j = 2; j < height + 100; j += gui.distanceX.y) {
-			float k = (evodd = !evodd) ? gui.distanceY.y/2 : 0;
+			float k = (evodd = !evodd) ? gui.offset : 0;
 			for (int i = 0; i < width + 100; i += gui.distanceY.y) {
 				stars.add(new PStar(this, new float[] { i + k, j }, gui.radius.y, gui.rotation.y, gui.elements.y));
 				// circles.add(new PCircle(this, new float[] { i + k, j }, 14 +

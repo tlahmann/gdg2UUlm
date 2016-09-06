@@ -16,6 +16,7 @@ public class Gui extends PApplet {
 	public PVector rotation = new PVector(0.f, 0.f, 360.f);
 	public PVector distanceX = new PVector(10.f, 74.f, 1000.f);
 	public PVector distanceY = new PVector(10.f, 84.f, 1000.f);
+	public float offset = distanceY.y / 2;
 
 	public PVector thickness = new PVector(1.f, 2.f, 12.f);
 	public PVector elements = new PVector(1.f, 6.f, 12.f);
@@ -158,6 +159,7 @@ public class Gui extends PApplet {
 			break;
 		case (3):
 			distanceY.y = theEvent.getController().getValue();
+			offset = distanceY.y / 2;
 			break;
 		case (4):
 			thickness.y = theEvent.getController().getValue();
@@ -166,6 +168,11 @@ public class Gui extends PApplet {
 			elements.y = theEvent.getController().getValue();
 			break;
 		case (6):
+			if (offset != 0) {
+				offset = 0;
+			} else {
+				offset = distanceY.y / 2;
+			}
 			break;
 		}
 		changes = true;
