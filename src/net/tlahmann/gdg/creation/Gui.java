@@ -6,6 +6,7 @@ import controlP5.ControlFont;
 import controlP5.ControlP5;
 import controlP5.Controller;
 import controlP5.Slider;
+import controlP5.Slider2D;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PVector;
@@ -14,9 +15,11 @@ public class Gui extends PApplet {
 
 	public PVector radius = new PVector(5.f, 50.f, 1000.f);
 	public PVector rotation = new PVector(0.f, 0.f, 360.f);
-	public PVector distanceX = new PVector(10.f, 74.f, 1000.f);
-	public PVector distanceY = new PVector(10.f, 84.f, 1000.f);
-	public float offset = distanceY.y / 2;
+	public PVector originX = new PVector(0, 0, 1024);
+	public PVector originY = new PVector(0, 0, 720);
+	public PVector distanceX = new PVector(10, 74, 1024);
+	public PVector distanceY = new PVector(10, 84, 720);
+	public float offset = distanceX.y / 2;
 
 	public PVector thickness = new PVector(1.f, 2.f, 12.f);
 	public PVector elements = new PVector(1.f, 6.f, 12.f);
@@ -71,7 +74,19 @@ public class Gui extends PApplet {
 		styleControl(b);
 		b.setId(24);
 
-		int xpos = 210;
+		Slider2D s2d;
+		s2d = cp5.addSlider2D("origin");
+		s2d.setPosition(20, 210);
+		s2d.setSize(200, 113);
+		s2d.setMinX(originX.x);
+		s2d.setMaxX(originX.z);
+		s2d.setMinY(originY.x);
+		s2d.setMaxY(originY.z);
+		s2d.setArrayValue(new float[] { originX.y, originY.y });
+		s2d.setId(10);
+		styleControl(s2d);
+
+		int xpos = 353;
 
 		String[] names = new String[] { "radius", "rotation", "x distance", "y distance", "tickness", "elements" };
 		PVector[] properties = new PVector[] { radius, rotation, distanceX, distanceY, thickness, elements };
@@ -156,10 +171,11 @@ public class Gui extends PApplet {
 			break;
 		case (2):
 			distanceX.y = theEvent.getController().getValue();
+			offset = distanceX.y / 2;
 			break;
 		case (3):
 			distanceY.y = theEvent.getController().getValue();
-			offset = distanceY.y / 2;
+
 			break;
 		case (4):
 			thickness.y = theEvent.getController().getValue();
@@ -171,8 +187,12 @@ public class Gui extends PApplet {
 			if (offset != 0) {
 				offset = 0;
 			} else {
-				offset = distanceY.y / 2;
+				offset = distanceX.y / 2;
 			}
+			break;
+		case (10):
+			originX.y = theEvent.getController().getArrayValue()[0];
+			originY.y = theEvent.getController().getArrayValue()[1];
 			break;
 		}
 		changes = true;
