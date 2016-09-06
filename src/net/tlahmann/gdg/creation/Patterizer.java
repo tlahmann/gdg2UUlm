@@ -30,7 +30,7 @@ public class Patterizer extends PApplet {
 		stars = new ArrayList<PShape>();
 		boolean evodd = true;
 		for (int j = (int) gui.originY.y; j < height + 100; j += gui.distanceY.y) {
-			float k = (evodd = !evodd) ? gui.offset : 0;
+			float k = (evodd = !evodd) && gui.offset ? gui.distanceX.y / 2 : 0;
 			for (int i = (int) gui.originX.y; i < width + 100; i += gui.distanceX.y) {
 				stars.add(new PShape(this, new float[] { i + k, j }, gui.radius.y, gui.rotation.y, gui.elements.y));
 			}
