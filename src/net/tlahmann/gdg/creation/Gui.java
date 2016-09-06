@@ -10,6 +10,8 @@ import controlP5.Slider2D;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PVector;
+import processing.data.JSONArray;
+import processing.data.JSONObject;
 
 public class Gui extends PApplet {
 
@@ -17,12 +19,12 @@ public class Gui extends PApplet {
 	public PVector rotation = new PVector(0, 0, 360);
 	public PVector originX = new PVector(0, 0, 1024);
 	public PVector originY = new PVector(0, 0, 720);
-	public PVector distanceX = new PVector(10, 74, 1024);
-	public PVector distanceY = new PVector(10, 84, 720);
+	public PVector distanceX = new PVector(10, 100, 1024);
+	public PVector distanceY = new PVector(10, 100, 720);
 	public float offset = distanceX.y / 2;
 
-	public PVector thickness = new PVector(1, 2, 50);
-	public PVector elements = new PVector(1, 6, 50);
+	public PVector thickness = new PVector(1, 1, 50);
+	public PVector elements = new PVector(1, 4, 50);
 
 	public boolean outline = false;
 
@@ -189,11 +191,32 @@ public class Gui extends PApplet {
 		case (22):
 			outline = false;
 			break;
-
+		case (61):
+			reset();
+			break;
 		case (62):
 			screenshot = true;
 			break;
 		}
 		changes = true;
+	}
+
+	void reset() {
+		JSONArray file = loadJSONArray("./src/net/tlahmann/gdg/data/patterizer-reset.json");
+
+		JSONObject reset = file.getJSONObject(0);
+
+		radius.y = reset.getFloat("radius");
+		rotation.y = reset.getFloat("rotation");
+		originX.y = reset.getJSONObject("origin").getFloat("x");
+		originY.y = reset.getJSONObject("origin").getFloat("y");
+		distanceX.y = reset.getJSONObject("distance").getFloat("x");
+		distanceY.y = reset.getJSONObject("distance").getFloat("y");
+		offset = reset.getInt("offset") == 1 ? distanceX.y / 2 : 0;
+
+		thickness.y = reset.getFloat("thickness");
+		elements.y = reset.getFloat("elements");
+
+		outline = reset.getInt("outline") == 1;
 	}
 }
