@@ -1,5 +1,6 @@
-package net.tlahmann.gdg.art;
+package net.tlahmann.gdg.art.object;
 
+import net.tlahmann.gdg.art.Painter;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -15,7 +16,7 @@ public class Particle {
 
 	final float MASS;
 	final float MINMASS = 0.2f;
-	final float MAXMASS = 0.5f;
+	final float MAXMASS = 10.5f;
 	final float MAXTTL = 255;
 	final float FRICTIONLOSS = 0.9f;
 	final boolean staticParticle;
@@ -48,7 +49,8 @@ public class Particle {
 		velocity = new PVector((v == -1 ? INITVELOCITY : v) * PApplet.sin(orientation),
 				(v == -1 ? INITVELOCITY : v) * PApplet.cos(orientation));
 
-		lifespan = t == -1 ? -1 : t != 0 ? (MAXTTL / t) * parent.random(0.95f, 1.05f) : 1;
+		lifespan = t == -1 ? -1 : t != 0 ? (MAXTTL / t) : 1;
+		//* parent.random(0.95f, 1.05f)
 
 		acceleration = new PVector(0, 0);
 		minVelocity = velocity.mag() / 5;

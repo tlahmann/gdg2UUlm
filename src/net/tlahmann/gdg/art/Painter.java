@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
+import net.tlahmann.gdg.art.object.Particle;
+import net.tlahmann.gdg.art.object.Region;
 import processing.core.PApplet;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
@@ -13,8 +15,8 @@ public class Painter extends PApplet {
 	private static final int WIDTH = 800;
 	private static final int HEIGHT = 800;
 
-	ArrayList<Particle> particles;
-	ArrayList<Particle> deadParticles;
+	public ArrayList<Particle> particles;
+	public ArrayList<Particle> deadParticles;
 	Region regions;
 	long lastSpawn = 0;
 
@@ -23,7 +25,7 @@ public class Painter extends PApplet {
 
 	static JSONArray file;
 	static int colorModel = 0;
-	int backgroundColor;
+	public int backgroundColor;
 	static float[][] particleColors;
 	static int fillRegion;
 

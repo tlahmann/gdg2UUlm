@@ -1,15 +1,16 @@
-package net.tlahmann.gdg.art;
+package net.tlahmann.gdg.art.object;
 
 import java.util.ArrayList;
 
 import megamu.mesh.MPolygon;
 import megamu.mesh.Voronoi;
+import net.tlahmann.gdg.art.Painter;
 
 public class Region {
 	Painter parent;
 	Voronoi myVoronoi;
 
-	Region(Painter p) {
+	public Region(Painter p) {
 		parent = p;
 	}
 
