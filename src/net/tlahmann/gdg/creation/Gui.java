@@ -1,5 +1,8 @@
 package net.tlahmann.gdg.creation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import controlP5.Button;
 import controlP5.ControlEvent;
 import controlP5.ControlFont;
@@ -34,6 +37,8 @@ public class Gui extends PApplet {
 	public boolean changes = false;
 	public boolean screenshot = false;
 
+	private List<Controller<?>> controllers = new ArrayList<Controller<?>>();
+
 	private PFont f20;
 	ControlFont f08;
 	private ControlP5 cp5;
@@ -57,6 +62,7 @@ public class Gui extends PApplet {
 		b.setSize(120, 40);
 		styleControl(b);
 		b.setId(21);
+		controllers.add(b);
 
 		b = cp5.addButton("Inline");
 		b.setValue(0);
@@ -64,6 +70,7 @@ public class Gui extends PApplet {
 		b.setSize(120, 40);
 		styleControl(b);
 		b.setId(22);
+		controllers.add(b);
 
 		Slider2D s2d;
 		s2d = cp5.addSlider2D("origin");
@@ -76,6 +83,7 @@ public class Gui extends PApplet {
 		s2d.setArrayValue(new float[] { originX.y, originY.y });
 		s2d.setId(10);
 		styleControl(s2d);
+		controllers.add(s2d);
 
 		int xpos = 303;
 
@@ -93,6 +101,7 @@ public class Gui extends PApplet {
 			s.setNumberOfTickMarks((int) Math.ceil((float) properties[i].z - (float) properties[i].x + 1));
 			s.showTickMarks(false);
 			s.setId(i);
+			controllers.add(s);
 		}
 
 		b = cp5.addButton("offsetted");
@@ -101,6 +110,7 @@ public class Gui extends PApplet {
 		b.setSize(120, guiElementHeight);
 		styleControl(b);
 		b.setId(6);
+		controllers.add(b);
 
 		b = cp5.addButton("reset");
 		b.setValue(0);
@@ -108,6 +118,7 @@ public class Gui extends PApplet {
 		b.setSize(120, guiElementHeight);
 		styleControl(b);
 		b.setId(61);
+		controllers.add(b);
 
 		b = cp5.addButton("save screenshot");
 		b.setValue(0);
@@ -115,6 +126,7 @@ public class Gui extends PApplet {
 		b.setSize(120, guiElementHeight);
 		styleControl(b);
 		b.setId(62);
+		controllers.add(b);
 	}
 
 	void styleControl(Controller<?> c) {
@@ -205,17 +217,15 @@ public class Gui extends PApplet {
 
 		JSONObject reset = file.getJSONObject(0);
 
-		radius.y = reset.getFloat("radius");
-		rotation.y = reset.getFloat("rotation");
-		originX.y = reset.getJSONObject("origin").getFloat("x");
-		originY.y = reset.getJSONObject("origin").getFloat("y");
-		distanceX.y = reset.getJSONObject("distance").getFloat("x");
-		distanceY.y = reset.getJSONObject("distance").getFloat("y");
-		offset = reset.getInt("offset") == 1 ? distanceX.y / 2 : 0;
-
-		thickness.y = reset.getFloat("thickness");
-		elements.y = reset.getFloat("elements");
-
+		controllers.get(2).setArrayValue(new float[] { reset.getJSONObject("origin").getFloat("x"),
+				reset.getJSONObject("origin").getFloat("y") });
+		controllers.get(3).setValue(reset.getFloat("radius"));
+		controllers.get(4).setValue(reset.getFloat("rotation"));
+		controllers.get(5).setValue(reset.getJSONObject("distance").getFloat("x"));
+		controllers.get(6).setValue(reset.getJSONObject("distance").getFloat("y"));
+		controllers.get(7).setValue(reset.getFloat("thickness"));
+		controllers.get(8).setValue(reset.getFloat("elements"));
+		offset = reset.getInt("offset") == 1;
 		outline = reset.getInt("outline") == 1;
 	}
 }
