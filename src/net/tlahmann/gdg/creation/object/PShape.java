@@ -4,12 +4,12 @@ import net.tlahmann.gdg.creation.Patterizer;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-public class PStar {
+public class PShape {
 	private Patterizer parent;
 	private PVector[] points;
 	private PVector center;
 
-	public PStar(Patterizer p, float[] pos, float radius, float rotation, float ends) {
+	public PShape(Patterizer p, float[] pos, float radius, float rotation, float ends) {
 		parent = p;
 
 		center = new PVector(pos[0], pos[1], 0);

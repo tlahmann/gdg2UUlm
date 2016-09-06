@@ -2,7 +2,7 @@ package net.tlahmann.gdg.creation;
 
 import java.util.List;
 
-import net.tlahmann.gdg.creation.object.PStar;
+import net.tlahmann.gdg.creation.object.PShape;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,7 +14,7 @@ public class Patterizer extends PApplet {
 	private static final int WIDTH = 1024;
 	private static final int HEIGHT = 720;
 
-	List<PStar> stars;
+	List<PShape> stars;
 
 	public Gui gui;
 
@@ -27,12 +27,12 @@ public class Patterizer extends PApplet {
 	}
 
 	private void init() {
-		stars = new ArrayList<PStar>();
+		stars = new ArrayList<PShape>();
 		boolean evodd = true;
 		for (int j = (int) gui.originY.y; j < height + 100; j += gui.distanceY.y) {
 			float k = (evodd = !evodd) ? gui.offset : 0;
 			for (int i = (int) gui.originX.y; i < width + 100; i += gui.distanceX.y) {
-				stars.add(new PStar(this, new float[] { i + k, j }, gui.radius.y, gui.rotation.y, gui.elements.y));
+				stars.add(new PShape(this, new float[] { i + k, j }, gui.radius.y, gui.rotation.y, gui.elements.y));
 			}
 		}
 		gui.changes = false;
@@ -52,7 +52,7 @@ public class Patterizer extends PApplet {
 
 		background(gui.colors[4]);
 
-		for (PStar s : stars)
+		for (PShape s : stars)
 			s.display();
 	}
 
