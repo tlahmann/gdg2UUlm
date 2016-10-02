@@ -19,6 +19,7 @@ import processing.data.JSONObject;
 public class Gui extends PApplet {
 
 	public PVector radius = new PVector(5, 50, 1000);
+	public PVector radiusChange = new PVector(0, 0, 10);
 	public PVector rotation = new PVector(0, 0, 360);
 	public PVector originX = new PVector(0, 0, 1024);
 	public PVector originY = new PVector(0, 0, 720);
@@ -87,11 +88,13 @@ public class Gui extends PApplet {
 
 		int xpos = 303;
 
-		String[] names = new String[] { "radius", "rotation", "x distance", "y distance", "tickness", "elements" };
-		PVector[] properties = new PVector[] { radius, rotation, distanceX, distanceY, thickness, elements };
+		String[] names = new String[] { "radius", "radius change", "rotation", "x distance", "y distance", "tickness",
+				"elements" };
+		PVector[] properties = new PVector[] { radius, radiusChange, rotation, distanceX, distanceY, thickness,
+				elements };
 
 		Slider s;
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < names.length; i++) {
 			s = cp5.addSlider(names[i]);
 			s.setPosition(20, xpos + i * 2 * guiElementHeight);
 			s.setRange((float) properties[i].x, (float) properties[i].z);
@@ -106,7 +109,7 @@ public class Gui extends PApplet {
 
 		b = cp5.addButton("offsetted");
 		b.setValue(0);
-		b.setPosition(20, xpos + 6 * 2 * guiElementHeight);
+		b.setPosition(20, xpos + names.length * 2 * guiElementHeight);
 		b.setSize(120, guiElementHeight);
 		styleControl(b);
 		b.setId(6);
@@ -170,22 +173,24 @@ public class Gui extends PApplet {
 			radius.y = theEvent.getController().getValue();
 			break;
 		case (1):
-			rotation.y = radians(theEvent.getController().getValue());
+			radiusChange.y = theEvent.getController().getValue();
 			break;
 		case (2):
-			distanceX.y = theEvent.getController().getValue();
+			rotation.y = radians(theEvent.getController().getValue());
 			break;
 		case (3):
-			distanceY.y = theEvent.getController().getValue();
-
+			distanceX.y = theEvent.getController().getValue();
 			break;
 		case (4):
-			thickness.y = theEvent.getController().getValue();
+			distanceY.y = theEvent.getController().getValue();
 			break;
 		case (5):
-			elements.y = theEvent.getController().getValue();
+			thickness.y = theEvent.getController().getValue();
 			break;
 		case (6):
+			elements.y = theEvent.getController().getValue();
+			break;
+		case (7):
 			if (offset) {
 				offset = false;
 			} else {
@@ -220,11 +225,12 @@ public class Gui extends PApplet {
 		controllers.get(2).setArrayValue(new float[] { reset.getJSONObject("origin").getFloat("x"),
 				reset.getJSONObject("origin").getFloat("y") });
 		controllers.get(3).setValue(reset.getFloat("radius"));
-		controllers.get(4).setValue(reset.getFloat("rotation"));
-		controllers.get(5).setValue(reset.getJSONObject("distance").getFloat("x"));
-		controllers.get(6).setValue(reset.getJSONObject("distance").getFloat("y"));
-		controllers.get(7).setValue(reset.getFloat("thickness"));
-		controllers.get(8).setValue(reset.getFloat("elements"));
+		controllers.get(4).setValue(reset.getFloat("radiusChange"));
+		controllers.get(5).setValue(reset.getFloat("rotation"));
+		controllers.get(6).setValue(reset.getJSONObject("distance").getFloat("x"));
+		controllers.get(7).setValue(reset.getJSONObject("distance").getFloat("y"));
+		controllers.get(8).setValue(reset.getFloat("thickness"));
+		controllers.get(9).setValue(reset.getFloat("elements"));
 		offset = reset.getInt("offset") == 1;
 		outline = reset.getInt("outline") == 1;
 	}

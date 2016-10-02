@@ -1,5 +1,6 @@
 [{
     "radius": 50,
+    "radiusChange": 0,
     "rotation": 0,
     "origin": {
         "x": 0,
