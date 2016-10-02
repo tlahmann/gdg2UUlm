@@ -112,7 +112,7 @@ public class Gui extends PApplet {
 		b.setPosition(20, xpos + names.length * 2 * guiElementHeight);
 		b.setSize(120, guiElementHeight);
 		styleControl(b);
-		b.setId(6);
+		b.setId(7);
 		controllers.add(b);
 
 		b = cp5.addButton("reset");

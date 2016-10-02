@@ -39,7 +39,6 @@ public class Patterizer extends PApplet {
 						gui.rotation.y, 
 						gui.elements.y));
 			}
-			System.out.println((l * gui.radiusChange.y)/gui.radiusChange.z);
 		}
 		gui.changes = false;
 	}
