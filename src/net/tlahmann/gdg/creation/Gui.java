@@ -16,8 +16,28 @@ import processing.core.PVector;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
 
+/**
+ * <h1>Gui</h1>
+ * <p>
+ * The graphical user interface provides a way to change the look of the created
+ * pattern within a patterizer.
+ * </p>
+ * 
+ * @author Tobias Lahmann
+ * @version 1.0
+ * @since 2016-10-05
+ * 
+ * @see processing.core.PApplet
+ * @see net.tlahmann.gdg.creation.Patterizer
+ * @see controlP5.ControlP5
+ */
 public class Gui extends PApplet {
 
+	/*
+	 * public variables representing the shape of one PShape most often the
+	 * variable is represented by a vector of the following array:
+	 * PVector(minimal value, current or initial value, maximal value)
+	 */
 	public PVector radius = new PVector(5, 50, 1000);
 	public PVector radiusChange = new PVector(0, 0, 10);
 	public PVector rotation = new PVector(0, 0, 360);
@@ -32,25 +52,56 @@ public class Gui extends PApplet {
 
 	public boolean outline = false;
 
+	// fixed colors. It is not intended to change these at runtime to focus on
+	// the pattern and shape rather than color
 	public int[] colors = new int[] { color(255, 255, 255, 255), color(230, 230, 230, 255), color(128, 128, 128, 255),
 			color(50, 50, 50, 255), color(0, 0, 0, 255) };
 
+	/*
+	 * public variable to react to changes within the gui. This manner was
+	 * chosen to avoid exceptions regarding the length of the pshape. If changes
+	 * have been made while the main thread is drawing the look of the elements
+	 * would not change but the patterizer would crash.
+	 */
 	public boolean changes = false;
+	// Public variables to determine the request of a screenshot
 	public boolean screenshot = false;
 
+	// list of control elements
 	private List<Controller<?>> controllers = new ArrayList<Controller<?>>();
 
 	private PFont f20;
-	ControlFont f08;
+	private ControlFont cf10;
 	private ControlP5 cp5;
 
+	/**
+	 * <p>
+	 * Overwriting setup method from PApplet in Processing. Defines framerate,
+	 * initializes fonts and initializes the control elements.
+	 * </p>
+	 * 
+	 * @since 2016-10-05
+	 */
 	public void setup() {
-		frameRate(24);
+		// 30 fps was chosen to react in a timely manner to interaction with the
+		// user
+		frameRate(30);
 
 		// Create fonts
 		f20 = createFont("./src/net/tlahmann/gdg/data/OpenSans-Regular.ttf", 20);
-		f08 = new ControlFont(createFont("./src/net/tlahmann/gdg/data/OpenSans-Regular.ttf", 10));
+		cf10 = new ControlFont(createFont("./src/net/tlahmann/gdg/data/OpenSans-Regular.ttf", 10));
 
+		initControls();
+	}
+
+	/**
+	 * <p>
+	 * Initializes the control elements.
+	 * </p>
+	 * 
+	 * @since 2016-10-05
+	 */
+	private void initControls() {
 		cp5 = new ControlP5(this);
 
 		int guiElementHeight = 15;
@@ -132,18 +183,45 @@ public class Gui extends PApplet {
 		controllers.add(b);
 	}
 
-	void styleControl(Controller<?> c) {
+	/**
+	 * <p>
+	 * Set consistent style to the control elements.
+	 * </p>
+	 * 
+	 * @since 2016-10-05
+	 */
+	private void styleControl(Controller<?> c) {
 		c.setColorBackground(colors[3]); // dark grey
 		c.setColorForeground(colors[0]); // white
 		c.setColorActive(colors[1]); // light grey
 		c.setColorValueLabel(colors[2]); // grey
-		c.setFont(f08);
+		c.setFont(cf10);
 	}
 
+	/**
+	 * <p>
+	 * Overwriting settings method from PApplet in Processing. Necessary because
+	 * when not using the PDE, size() can only be used inside settings().
+	 * </p>
+	 * 
+	 * @since 2016-10-05
+	 * 
+	 * @see processing.core.PApplet
+	 */
 	public void settings() {
 		size(300, 600);
 	}
 
+	/**
+	 * <p>
+	 * Overwriting draw method from PApplet in Processing. The draw method is
+	 * displaying the defined control elements.
+	 * </p>
+	 * 
+	 * @since 2016-10-05
+	 * 
+	 * @see processing.core.PApplet
+	 */
 	public void draw() {
 		// gui container
 		strokeWeight(3);
@@ -165,30 +243,34 @@ public class Gui extends PApplet {
 		cp5.show();
 	}
 
-	// function controlEvent will be invoked with every value change
-	// in any registered controller
-	public void controlEvent(ControlEvent theEvent) {
-		switch (theEvent.getId()) {
+	/**
+	 *  function controlEvent will be invoked with every value change
+	 *  in any registered controller
+	 *  
+	 * @param ev calling event to handle
+	 */
+	public void controlEvent(ControlEvent ev) {
+		switch (ev.getId()) {
 		case (0):
-			radius.y = theEvent.getController().getValue();
+			radius.y = ev.getController().getValue();
 			break;
 		case (1):
-			radiusChange.y = theEvent.getController().getValue();
+			radiusChange.y = ev.getController().getValue();
 			break;
 		case (2):
-			rotation.y = radians(theEvent.getController().getValue());
+			rotation.y = radians(ev.getController().getValue());
 			break;
 		case (3):
-			distanceX.y = theEvent.getController().getValue();
+			distanceX.y = ev.getController().getValue();
 			break;
 		case (4):
-			distanceY.y = theEvent.getController().getValue();
+			distanceY.y = ev.getController().getValue();
 			break;
 		case (5):
-			thickness.y = theEvent.getController().getValue();
+			thickness.y = ev.getController().getValue();
 			break;
 		case (6):
-			elements.y = theEvent.getController().getValue();
+			elements.y = ev.getController().getValue();
 			break;
 		case (7):
 			if (offset) {
@@ -198,8 +280,8 @@ public class Gui extends PApplet {
 			}
 			break;
 		case (10):
-			originX.y = theEvent.getController().getArrayValue()[0];
-			originY.y = theEvent.getController().getArrayValue()[1];
+			originX.y = ev.getController().getArrayValue()[0];
+			originY.y = ev.getController().getArrayValue()[1];
 			break;
 		case (21):
 			outline = true;
@@ -217,7 +299,12 @@ public class Gui extends PApplet {
 		changes = true;
 	}
 
-	void reset() {
+	/**
+	 *  Resets the variables to its initial state.
+	 *  
+	 * @param ev calling event to handle
+	 */
+	private void reset() {
 		JSONArray file = loadJSONArray("./src/net/tlahmann/gdg/data/patterizer-reset.json");
 
 		JSONObject reset = file.getJSONObject(0);
