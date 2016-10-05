@@ -27,7 +27,7 @@ public class Gui extends PApplet {
 	public PVector distanceY = new PVector(10, 100, 720);
 	public boolean offset = false;
 
-	public PVector thickness = new PVector(1, 1, 50);
+	public PVector thickness = new PVector(1, 1, 10);
 	public PVector elements = new PVector(1, 4, 50);
 
 	public boolean outline = false;
