@@ -60,13 +60,6 @@ public class Painter extends PApplet {
 			particleColors[i][3] = 255;
 			particleColors[i][4] = JColors.getInt("fill");
 		}
-
-		player = new Minim(this).loadFile("./src/net/tlahmann/gdg/data/song.mp3");
-		// player.play();
-
-		frameRate(60);
-
-		init();
 	}
 
 	void init() {
@@ -100,7 +93,7 @@ public class Painter extends PApplet {
 
 		removeDead();
 		runParticles();
-		spawner();
+		// spawner();
 	}
 
 	void spawner() {
