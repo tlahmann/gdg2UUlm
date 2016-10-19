@@ -32,19 +32,20 @@ public class Painter extends PApplet {
 	static AudioPlayer player;
 
 	public void setup() {
-		file = loadJSONArray("./src/net/tlahmann/gdg/data/colors.json");
+		file = loadJSONArray("./src/net/tlahmann/gdg/data/colorBrewer.json");
 
 		JSONObject JColors = file.getJSONObject(colorModel);
 
-		JSONObject colorBG = JColors.getJSONObject("background");
-		JSONArray colorP = JColors.getJSONArray("particles");
-		backgroundColor = color(colorBG.getInt("r"), colorBG.getInt("g"), colorBG.getInt("b"), colorBG.getInt("a"));
-		particleColors = new float[colorP.size()][5];
-		for (int i = 0; i < colorP.size(); i++) {
-			particleColors[i][0] = colorP.getJSONObject(i).getInt("r");
-			particleColors[i][1] = colorP.getJSONObject(i).getInt("g");
-			particleColors[i][2] = colorP.getJSONObject(i).getInt("b");
-			particleColors[i][3] = colorP.getJSONObject(i).getInt("a");
+		String colorBG = JColors.getString("background");
+		JSONArray colorPs = JColors.getJSONArray("particles");
+		backgroundColor = unhex(colorBG);
+		particleColors = new float[colorPs.size()][5];
+		for (int i = 0; i < colorPs.size(); i++) {
+			int colorP = unhex(colorPs.getString(i));
+			particleColors[i][0] = colorP >> 16 & 0xFF;
+			particleColors[i][1] = colorP >> 8 & 0xFF;
+			particleColors[i][2] = colorP & 0xFF;
+			particleColors[i][3] = 255;
 			particleColors[i][4] = JColors.getInt("fill");
 		}
 
