@@ -32,10 +32,22 @@ public class Painter extends PApplet {
 	static AudioPlayer player;
 
 	public void setup() {
+		importColors();
+
+		player = new Minim(this).loadFile("./src/net/tlahmann/gdg/data/song.mp3");
+		// player.play();
+
+		frameRate(60);
+
+		init();
+	}
+
+	void importColors() {
 		file = loadJSONArray("./src/net/tlahmann/gdg/data/colorBrewer.json");
 
 		JSONObject JColors = file.getJSONObject(colorModel);
 
+		println(JColors.getString("name"));
 		String colorBG = JColors.getString("background");
 		JSONArray colorPs = JColors.getJSONArray("particles");
 		backgroundColor = unhex(colorBG);
@@ -122,6 +134,24 @@ public class Painter extends PApplet {
 	public void keyPressed() {
 		if (key == 'r' || key == 'R') {
 			init();
+		} else if (key == 'c' || key == 'C') {
+			colorModel++;
+			colorModel = (colorModel % 35 + 35) % 35;
+			importColors();
+			for (Particle p : particles) {
+				// Update and display
+				int i = (int) random(0, particleColors.length);
+				p.color = particleColors[i];
+			}
+		} else if (key == 'x' || key == 'X') {
+			colorModel--;
+			colorModel = (colorModel % 35 + 35) % 35;
+			importColors();
+			for (Particle p : particles) {
+				// Update and display
+				int i = (int) random(0, particleColors.length);
+				p.color = particleColors[i];
+			}
 		}
 	}
 
