@@ -59,7 +59,7 @@ public class Particle {
 	public void run() {
 		update();
 		display();
-		checkCollision();
+		//checkCollision();
 		checkEdges();
 	}
 
