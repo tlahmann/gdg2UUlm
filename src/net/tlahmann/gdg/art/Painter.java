@@ -175,6 +175,14 @@ public class Painter extends PApplet {
 		regions.run(particles);
 	}
 
+	public int calculateColor(float x, float y) {
+		float dist = dist(x, y, 0, 0);
+		return lerpColor((int) color(particleColors[0][0], particleColors[0][1], particleColors[0][2]),
+				(int) color(particleColors[particleColors.length - 1][0], particleColors[particleColors.length - 1][1],
+						particleColors[particleColors.length - 1][2]),
+				dist / sqrt(sq(WIDTH) + sq(HEIGHT)));
+	}
+
 	public static void main(String[] args) {
 		PApplet.main(new String[] { Painter.class.getName() });
 	}
